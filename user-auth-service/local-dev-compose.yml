@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  appointment-service:
+    image: alexwilliams2001/group13-docker-repo:appointment-service
+    ports:
+      - "8080:8080"
