@@ -3,32 +3,16 @@ name: Run Gradle on push
 on: [push]
 
 jobs:
-
-  check:
-    name: Check files
-    outputs:
-      run_job: bob
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      - name: check modified files
-        id: check_files
-        run: |
-          echo "=============== list modified files ==============="
-          git diff --name-only HEAD^ HEAD
-          
-          echo "========== check paths of modified files =========="
-          git diff --name-only HEAD^ HEAD > files.txt
-          [ -s files.txt ] && echo "::set-output name=run_job::true"
-
   appointment-microservice-build:
-    needs: check
-    if: needs.check.outputs.run_job == 'true'
-    runs-on: ubuntu-latest
-    steps:
+    - runs-on: ubuntu-latest
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          appointment-service:
+            - 'appointment-service/**'
+      if: steps.filter.outputs.workflows == 'true'
+    - steps:
       - uses: actions/checkout@v3
         
       - name: Set up JDK 17
@@ -45,7 +29,6 @@ jobs:
         run: ./gradlew build
 
   chat-microservice-build:
-    needs: check
     if: needs.check.outputs.run_job == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -65,7 +48,6 @@ jobs:
         run: ./gradlew build
 
   user-auth-microservice-build:
-    needs: check
     if: needs.check.outputs.run_job == 'true'
     runs-on: ubuntu-latest
     steps:
