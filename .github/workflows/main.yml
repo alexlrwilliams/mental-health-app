@@ -15,13 +15,32 @@ jobs:
           filters: |
             appointment-service:
               - 'appointment-service/**'
-      - name: changed
-        if: steps.filter.outputs.appointment-service == 'true'
-        run: echo "File changed"
-
-      - name: not changed
-        if: steps.filter.outputs.appointment-service == 'true'
-        run: echo "File not changed"
+            
+  chat-service-check:
+    runs-on: ubuntu-latest
+    outputs:
+      diff-true: ${{ steps.filter.outputs.chat-service }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            chat-service:
+              - 'chat-service/**'
+            
+  user-auth-service-check:
+    runs-on: ubuntu-latest
+    outputs:
+      diff-true: ${{ steps.filter.outputs.user-auth-service }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            user-auth-service:
+              - 'user-auth-service/**'
 
   appointment-microservice-build:
     needs: appointment-service-check
@@ -43,7 +62,9 @@ jobs:
         run: ./gradlew build
 
   chat-microservice-build:
+    needs: chat-service-check
     runs-on: ubuntu-latest
+    if: needs.chat-service-check.outputs.diff-true == 'true'
     steps:
       - uses: actions/checkout@v3
 
@@ -61,7 +82,9 @@ jobs:
         run: ./gradlew build
 
   user-auth-microservice-build:
+    needs: user-auth-service-check
     runs-on: ubuntu-latest
+    if: needs.user-auth-service-check.outputs.diff-true == 'true'
     steps:
       - uses: actions/checkout@v3
 
