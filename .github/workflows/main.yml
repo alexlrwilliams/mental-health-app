@@ -1,6 +1,6 @@
 name: Run Gradle on push
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   appointment-service-check:
