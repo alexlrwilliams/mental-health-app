@@ -29,18 +29,18 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public User getAuthorityTypeByName(@PathVariable String email) {
+    public User getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
     @DeleteMapping("/{email}")
-    public void deleteAuthorityTypeByName(@PathVariable String email) {
+    public void deleteUser(@PathVariable String email) {
         userService.deleteUser(email);
     }
 
     @PutMapping("/{email}")
-    public User updateAuthorityType(@PathVariable String email,
-                                    @RequestBody JsonUser jsonUser) {
+    public User updateUser(@PathVariable String email,
+                           @RequestBody JsonUser jsonUser) {
         return userService.updateUser(email, jsonUser);
     }
 }
