@@ -11,6 +11,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -59,6 +63,7 @@ class UserServiceTest {
 
     @Test
     void createUser() {
+        when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.save(any(User.class))).thenReturn(user1);
         assertThat(userService.createUser(jsonUser)).isEqualTo(user1);
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
@@ -81,6 +86,7 @@ class UserServiceTest {
 
     @Test
     void updateUser() {
+        when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.of(user1));
 
         userService.updateUser(EMAIL, jsonUser);

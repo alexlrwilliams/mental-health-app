@@ -5,6 +5,7 @@ import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,12 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -29,7 +32,7 @@ public class UserService {
     public User createUser(JsonUser jsonUser) {
         var user = new User(
                 jsonUser.getEmail(),
-                jsonUser.getPassword(),
+                encryptPassword(jsonUser.getPassword()),
                 jsonUser.getAuthorities(),
                 jsonUser.getFirstName(),
                 jsonUser.getLastName(),
@@ -47,7 +50,7 @@ public class UserService {
         user.setFirstName(jsonUser.getFirstName());
         user.setLastName(jsonUser.getLastName());
         user.setEmail(jsonUser.getEmail());
-        user.setPassword(jsonUser.getPassword());
+        user.setPassword(encryptPassword(jsonUser.getPassword()));
         user.setAddress(jsonUser.getAddress());
         user.setAuthorities(jsonUser.getAuthorities());
         return userRepository.save(user);
@@ -57,5 +60,9 @@ public class UserService {
         return userRepository.findUserByEmail(email).orElseThrow(
                 () -> new AuthorityNotFoundException(
                         "Could not find authority with email '%s'".formatted(email)));
+    }
+
+    private String encryptPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 }
