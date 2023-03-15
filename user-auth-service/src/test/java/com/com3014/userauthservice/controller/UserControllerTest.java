@@ -1,6 +1,6 @@
 package com.com3014.userauthservice.controller;
 
-import com.com3014.userauthservice.model.Authority;
+import com.com3014.userauthservice.UnitTestHelper;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.service.UserService;
@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.com3014.userauthservice.UnitTestHelper.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -23,21 +24,10 @@ class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
+    private final User user1 = UnitTestHelper.testUser1;
+    private final User user2 = UnitTestHelper.testUser2;
 
-    private static final String EMAIL = "john.doe@gmail.com";
-    private static final String EMAIL_2 = "jane.smith@gmail.com";
-    private static final String PASSWORD = "password";
-    private static final List<Authority> AUTHORITIES = List.of(Authority.BOOK_APPOINTMENT, Authority.ACCESS_ALL_PATIENTS);
-    private static final String FIRST_NAME = "John";
-    private static final String FIRST_NAME_2 = "Jane";
-    private static final String LAST_NAME = "Doe";
-    private static final String LAST_NAME_2 = "Smith";
-    private static final String ADDRESS = "42 Dancing Ave";
-
-    private final User user1 = new User(EMAIL, PASSWORD, AUTHORITIES, FIRST_NAME, LAST_NAME, ADDRESS);
-    private final User user2 = new User(EMAIL_2, PASSWORD, AUTHORITIES, FIRST_NAME_2, LAST_NAME_2, ADDRESS);
-
-    private final JsonUser jsonUser = new JsonUser(EMAIL, PASSWORD, AUTHORITIES, FIRST_NAME, LAST_NAME, ADDRESS);
+    private final JsonUser jsonUser = UnitTestHelper.jsonUser;
 
     private final List<User> allUsers = List.of(user1, user2);
 
