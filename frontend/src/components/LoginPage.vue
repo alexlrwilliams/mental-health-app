@@ -64,17 +64,18 @@ export default {
   }
   .login-form__buttons b-button{
     display: inline-block;
-    margin-right: 10px;
     flex-direction: column;
     align-items: center;
   }
   .login-form__login {
     width: 100%;
     border-radius: 13px;
+    margin-bottom: 2px
   }
   .login-form__signup {
     width: 100%;
     border-radius: 10px;
+    margin-top: 2px
   }
   .login-container {
     display: flex;
