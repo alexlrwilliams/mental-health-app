@@ -111,10 +111,12 @@ export default {
     .register-form__register {
     width: 100%;
     border-radius: 13px;
+    margin-bottom: 2px
   }
     .register-form__login {
     width: 100%;
     border-radius: 10px;
+    margin-top: 2px
   }
   .register-container {
     display: flex;
