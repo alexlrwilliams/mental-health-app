@@ -84,6 +84,7 @@ export default {
       password: ''
     }
   },
+  name: 'RegisterPage',
   methods: {
     register() {
       

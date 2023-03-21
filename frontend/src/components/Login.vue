@@ -44,6 +44,7 @@ export default {
       password: ''
     }
   },
+  name: 'LoginPage',
   methods: {
     login() {
       
