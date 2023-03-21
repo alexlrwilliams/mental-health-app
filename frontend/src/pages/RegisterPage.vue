@@ -61,7 +61,7 @@
 
           <div class="register-form__buttons">
             <b-button type='submit' variant="success" class='register-form__register'>Create an account</b-button>
-            <b-button href='/login' variant="danger" class='register-form__login'>Back to Login page</b-button>
+            <b-button href='/login' variant="primary" class='register-form__login'>Back to Login page</b-button>
           </div>
         </b-form>
       </b-card-body>
@@ -98,10 +98,6 @@ export default {
 <style scoped>
   .card-header h4 {
     margin-bottom: 0;
-  }
-  .btn-primary {
-    background-color: light-blue;
-    border-color: blue;
   }
   .register-form__buttons{
     display: flex;

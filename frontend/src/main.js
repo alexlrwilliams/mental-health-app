@@ -2,9 +2,9 @@ import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import App from './App.vue';
 import VueRouter from 'vue-router'
-import Home from './components/HomePage.vue'
-import Login from './components/LoginPage.vue'
-import Register from './components/RegisterPage.vue'
+import Home from './pages/HomePage.vue'
+import Login from './pages/LoginPage.vue'
+import Register from './pages/RegisterPage.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
