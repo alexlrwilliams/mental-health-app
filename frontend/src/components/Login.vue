@@ -25,11 +25,12 @@
                           v-model="password"
                           required></b-form-input>
           </b-form-group>
-          <div class="button-container">
-          <b-button type="submit" variant="primary" class='login-button'>Login</b-button> <br>
 
-          <b-button href='/register' variant="success" class='signup-button'>Create an account</b-button>
+          <div class="login-form__buttons">
+          <b-button type="submit" variant="primary" class='login-form__login'>Login</b-button> <br>
+          <b-button href='/register' variant="success" class='login-form__signup'>Create an account</b-button>
           </div>
+          
         </b-form>
       </b-card-body>
     </b-card>
@@ -61,16 +62,16 @@ export default {
     background-color: light-blue;
     border-color: blue;
   }
-  .button-container {
+  .login-form__buttons{
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .login-button {
+  .login-form__login {
     width: 100%;
     border-radius: 13px;
   }
-  .signup-button {
+  .login-form__signup {
     width: 100%;
     border-radius: 10px;
   }
