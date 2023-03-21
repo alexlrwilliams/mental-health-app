@@ -3,7 +3,7 @@
     <b-card class="login-form">
       <b-card-header>
         <h4><b>Login Form:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b> application !! Please Login to your account</p>
+        <p>Welcome to <b>EvenBetterHealth</b>. Please Login to your account or create an account if you don't have one.</p>
       </b-card-header>
       <b-card-body>
         <b-form @submit.prevent="login" >
