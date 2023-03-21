@@ -58,8 +58,10 @@
                           v-model="password"
                           required></b-form-input>
           </b-form-group><br>
-          <div class="button-container">
-          <b-button type='submit' variant="success" class='signup-button'>Create an account</b-button>
+
+          <div class="register-form__buttons">
+            <b-button type='submit' variant="success" class='register-form__register'>Create an account</b-button>
+            <b-button href='/login' variant="danger" class='register-form__login'>Back to Login page</b-button>
           </div>
         </b-form>
       </b-card-body>
@@ -101,17 +103,25 @@ export default {
     background-color: light-blue;
     border-color: blue;
   }
-  .button-container {
+  .register-form__buttons{
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+    .register-form__register {
+    width: 100%;
+    border-radius: 13px;
+  }
+    .register-form__login {
+    width: 100%;
+    border-radius: 10px;
   }
   .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 120vh;
-    margin-top: -80px; /* adjust as needed */
+    margin-top: -40px; /* adjust as needed */
     background-image: url('https://thumbs.dreamstime.com/b/portrait-happy-doctors-team-showing-thumbs-up-80704124.jpg');
     background-size: cover;
     background-position: center;
