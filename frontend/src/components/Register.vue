@@ -3,7 +3,7 @@
     <b-card class="register-form">
       <b-card-header>
         <h4><b>Register Form:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b> application ! Please register your account, if you are a new user</p>
+        <p>Welcome to <b>EvenBetterHealth</b>. Please register your account, if you are a new user.</p>
       </b-card-header>
       <b-card-body>
         <b-form @submit.prevent="register" >
