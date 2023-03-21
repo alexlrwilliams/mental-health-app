@@ -2,7 +2,7 @@
   <div class="register-container">
     <b-card class="register-form">
       <b-card-header>
-        <h4><b>Register Form:</b></h4>
+        <h4><b>Register your account:</b></h4>
         <p>Welcome to <b>EvenBetterHealth</b>. Please register your account, if you are a new user.</p>
       </b-card-header>
       <b-card-body>

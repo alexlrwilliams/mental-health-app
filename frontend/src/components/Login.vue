@@ -2,7 +2,7 @@
   <div class="login-container">
     <b-card class="login-form">
       <b-card-header>
-        <h4><b>Login Form:</b></h4>
+        <h4><b>Log into your account:</b></h4>
         <p>Welcome to <b>EvenBetterHealth</b>. Please Login to your account or create an account if you don't have one.</p>
       </b-card-header>
       <b-card-body>
@@ -27,7 +27,7 @@
           </b-form-group>
 
           <div class="login-form__buttons">
-          <b-button type="submit" variant="primary" class='login-form__login'>Login</b-button> <br>
+          <b-button type="submit" variant="primary" class='login-form__login'>Log in</b-button> 
           <b-button href='/register' variant="success" class='login-form__signup'>Create an account</b-button>
           </div>
           
@@ -62,8 +62,9 @@ export default {
     background-color: light-blue;
     border-color: blue;
   }
-  .login-form__buttons{
-    display: flex;
+  .login-form__buttons b-button{
+    display: inline-block;
+    margin-right: 10px;
     flex-direction: column;
     align-items: center;
   }
