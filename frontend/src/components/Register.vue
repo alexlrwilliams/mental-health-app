@@ -74,11 +74,11 @@ export default {
       fname: '',
       lname: '',
       address: '',
-      selected:'', 
+      profession:'', 
       options: [
-        {item: 'A', name: 'Patient'},
-        {item: 'B', name: 'Doctor'},
-        {item: 'C', name: 'Administrator'}
+        {item: 'PATIENT', name: 'Patient'},
+        {item: 'DOCTOR', name: 'Doctor'},
+        {item: 'ADMINISTRATOR', name: 'Administrator'}
       ],
       email: '',
       password: ''
