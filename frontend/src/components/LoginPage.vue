@@ -81,8 +81,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120vh;
-    margin-top: -100px; /* adjust as needed */
+    height: 100vh;
     background-image: url('https://thumbs.dreamstime.com/b/portrait-happy-doctors-team-showing-thumbs-up-80704124.jpg');
     background-size: cover;
     background-position: center;
