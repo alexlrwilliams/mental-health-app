@@ -49,10 +49,10 @@ public class SpringGatewayChatServiceRoutingTest {
     public void contextFails() {
         webClient
                 .get()
-                .uri("/api/appointment")
+                .uri("/api/appointments/test")
                 .exchange()
                 .expectStatus()
-                .is4xxClientError();
+                .is5xxServerError();
     }
 
 }

@@ -49,7 +49,7 @@ public class SpringGatewayAppointmentServiceRoutingTest {
     public void contextFails() {
         webClient
                 .get()
-                .uri("/api/users")
+                .uri("/api/users/test")
                 .exchange()
                 .expectStatus()
                 .is5xxServerError();
