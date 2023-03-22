@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
@@ -14,13 +15,14 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWireMock(port = 8084)
+@AutoConfigureWireMock(port = 5003)
+@ActiveProfiles("test")
 public class SpringGatewayChatServiceRoutingTest {
 
     @LocalServerPort
-    protected int port = 0;
+    private int port = 0;
 
-    protected WebTestClient webClient;
+    private WebTestClient webClient;
 
     @BeforeEach
     public void setup() {
@@ -36,7 +38,7 @@ public class SpringGatewayChatServiceRoutingTest {
     }
 
     @Test
-    public void contextLoads() {
+    public void chat_route__successful() {
         webClient
                 .get()
                 .uri("/api/chat")
@@ -46,7 +48,7 @@ public class SpringGatewayChatServiceRoutingTest {
     }
 
     @Test
-    public void contextFails() {
+    public void other_route__unsuccessful() {
         webClient
                 .get()
                 .uri("/api/appointments/test")

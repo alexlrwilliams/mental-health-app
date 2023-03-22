@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
@@ -14,7 +15,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWireMock(port = 8082)
+@AutoConfigureWireMock(port = 5001)
+@ActiveProfiles("test")
 public class SpringGatewayUserAuthRoutingTest {
 
     @LocalServerPort
@@ -36,7 +38,7 @@ public class SpringGatewayUserAuthRoutingTest {
     }
 
     @Test
-    public void contextLoads() {
+    public void users_route__successful() {
         webClient
                 .get()
                 .uri("/api/users")
@@ -46,7 +48,7 @@ public class SpringGatewayUserAuthRoutingTest {
     }
 
     @Test
-    public void contextFails() {
+    public void other_route__unsuccessful() {
         webClient
                 .get()
                 .uri("/api/appointments/test")
