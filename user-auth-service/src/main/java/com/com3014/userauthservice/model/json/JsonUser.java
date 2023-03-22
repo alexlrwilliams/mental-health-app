@@ -1,22 +1,21 @@
 package com.com3014.userauthservice.model.json;
+import com.com3014.userauthservice.model.Role;
 
-import com.com3014.userauthservice.model.Authority;
 
-import java.util.List;
 
 public class JsonUser {
     private String email;
     private String password;
-    private List<Authority> authorities;
+    private Role role;
     private String firstName;
     private String lastName;
     private String address;
 
-    public JsonUser(String email, String password, List<Authority> authorities,
+    public JsonUser(String email, String password, Role role,
                     String firstName, String lastName, String address) {
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -38,12 +37,12 @@ public class JsonUser {
         this.email = email;
     }
 
-    public List<Authority> getAuthorities() {
-        return authorities;
+    public Role getRole() {
+        return role;
     }
 
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
+    public void setRole(Role authorities) {
+        this.role = role;
     }
 
     public String getFirstName() {
