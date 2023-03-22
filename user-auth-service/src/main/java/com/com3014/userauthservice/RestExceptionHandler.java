@@ -20,7 +20,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
-    protected ResponseEntity<ApiError> handleErrors(Exception ex) {
+    protected ResponseEntity<ApiError> handleNotFoundError(Exception ex) {
         ApiError apiError = new ApiError(NOT_FOUND, ex);
         return buildResponseEntity(apiError);
     }
