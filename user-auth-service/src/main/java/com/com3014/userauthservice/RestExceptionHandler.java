@@ -1,7 +1,7 @@
 package com.com3014.userauthservice;
 
-import com.com3014.userauthservice.exceptions.AuthorityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -13,7 +13,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
 
-    @ExceptionHandler({AuthorityNotFoundException.class})
+    @ExceptionHandler({UsernameNotFoundException.class})
     protected ResponseEntity<ApiError> handleErrors(Exception ex) {
         ApiError apiError = new ApiError(NOT_FOUND, ex);
         return buildResponseEntity(apiError);

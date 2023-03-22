@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.com3014.userauthservice.UnitTestHelper.*;
+import static com.com3014.userauthservice.UnitTestHelper.EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -45,7 +45,7 @@ class UserControllerTest {
 
     @Test
     void getUserByEmail() {
-        when(userService.getUserByEmail(EMAIL)).thenReturn(user1);
+        when(userService.getUserOrThrow(EMAIL)).thenReturn(user1);
         assertThat(userController.getUserByEmail(EMAIL)).isEqualTo(user1);
     }
 

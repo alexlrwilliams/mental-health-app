@@ -51,21 +51,34 @@ class UserServiceTest {
 
     @Test
     void getUserByEmail__user_exists() {
-        when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.of(user1));
-        assertThat(userService.getUserByEmail(EMAIL)).isEqualTo(user1);
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        assertThat(userService.getUserByEmail(EMAIL)).isEqualTo(Optional.of(user1));
     }
 
     @Test
     void getUserByEmail__user_does_not_exist() {
-        when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> userService.getUserByEmail(EMAIL));
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.empty());
+        assertThat(userService.getUserByEmail(EMAIL)).isEqualTo(Optional.empty());
     }
 
     @Test
-    void createUser() {
+    void getUserOrThrow__user_exists() {
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        assertThat(userService.getUserOrThrow(EMAIL)).isEqualTo(user1);
+    }
+
+    @Test
+    void getUserOrThrow__user_does_not_exist() {
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userService.getUserOrThrow(EMAIL));
+    }
+
+    @Test
+    void createUser__user_does_not_exist() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.save(any(User.class))).thenReturn(user1);
         assertThat(userService.createUser(jsonUser)).isEqualTo(user1);
+        verify(passwordEncoder, times(1)).encode(jsonUser.getPassword());
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
                 .usingRecursiveComparison()
@@ -73,8 +86,15 @@ class UserServiceTest {
     }
 
     @Test
+    void createUser__user_exists() {
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        verify(userRepository, never()).save(userArgumentCaptor.capture());
+        assertThatThrownBy(() -> userService.createUser(jsonUser));
+    }
+
+    @Test
     void deleteUser() {
-        when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.of(user1));
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
 
         userService.deleteUser(EMAIL);
 
@@ -87,7 +107,7 @@ class UserServiceTest {
     @Test
     void updateUser() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
-        when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.of(user1));
+        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
 
         userService.updateUser(EMAIL, jsonUser);
 

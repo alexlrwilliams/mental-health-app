@@ -1,14 +1,15 @@
 package com.com3014.userauthservice.service;
 
-import com.com3014.userauthservice.exceptions.AuthorityNotFoundException;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,15 +26,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserByEmail(String email) {
-        return getUser(email);
-    }
-
     public User createUser(JsonUser jsonUser) {
         var user = new User(
                 jsonUser.getEmail(),
                 encryptPassword(jsonUser.getPassword()),
-                jsonUser.getAuthorities(),
+                jsonUser.getRole(),
                 jsonUser.getFirstName(),
                 jsonUser.getLastName(),
                 jsonUser.getAddress()
@@ -42,24 +39,29 @@ public class UserService {
     }
 
     public void deleteUser(String email) {
-        userRepository.delete(getUser(email));
+        userRepository.delete(getUserOrThrow(email));
     }
 
     public User updateUser(String email, JsonUser jsonUser) {
-        var user = getUser(email);
-        user.setFirstName(jsonUser.getFirstName());
-        user.setLastName(jsonUser.getLastName());
-        user.setEmail(jsonUser.getEmail());
-        user.setPassword(encryptPassword(jsonUser.getPassword()));
-        user.setAddress(jsonUser.getAddress());
-        user.setAuthorities(jsonUser.getAuthorities());
+        var user = getUserOrThrow(email)
+                .setFirstName(jsonUser.getFirstName())
+                .setLastName(jsonUser.getLastName())
+                .setUsername(jsonUser.getEmail())
+                .setPassword(encryptPassword(jsonUser.getPassword()))
+                .setAddress(jsonUser.getAddress())
+                .setRole(jsonUser.getRole());
         return userRepository.save(user);
     }
 
-    private User getUser(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(
-                () -> new AuthorityNotFoundException(
-                        "Could not find authority with email '%s'".formatted(email)));
+
+    public User getUserOrThrow(String email) {
+        return getUserByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException(
+                        "Could not find user with email '%s'".formatted(email)));
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findUserByUsername(email);
     }
 
     private String encryptPassword(String password) {
