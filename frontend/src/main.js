@@ -8,6 +8,11 @@ import Register from './pages/RegisterPage.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import 'jquery/dist/jquery.min.js'
+import 'popper.js/dist/popper.min.js'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
 
 Vue.use(VueRouter)
 // Make BootstrapVue available throughout your project
