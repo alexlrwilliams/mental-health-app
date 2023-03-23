@@ -74,6 +74,30 @@ class UserServiceTest {
     }
 
     @Test
+    void getUserById__user_exists() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
+        assertThat(userService.getUserById(user1.getId())).isEqualTo(Optional.of(user1));
+    }
+
+    @Test
+    void getUserById__user_does_not_exist() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.empty());
+        assertThat(userService.getUserById(user1.getId())).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    void getUserByIdOrThrow__user_exists() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
+        assertThat(userService.getUserByIdOrThrow(user1.getId())).isEqualTo(user1);
+    }
+
+    @Test
+    void getUserByIdOrThrow__user_does_not_exist() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userService.getUserByIdOrThrow(user1.getId()));
+    }
+
+    @Test
     void createUser__user_does_not_exist() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.save(any(User.class))).thenReturn(user1);
@@ -89,7 +113,7 @@ class UserServiceTest {
     @Test
     void createUser__user_exists() {
         when(userRepository.findUserByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
-        verify(userRepository, never()).save(userArgumentCaptor.capture());
+        verify(userRepository, never()).save(any());
         assertThatThrownBy(() -> userService.createUser(jsonUser));
     }
 
@@ -106,9 +130,11 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser() {
+    void updateUser__conflicting_user_does_not_exist() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
+        when(userRepository.findUserByUsername(EMAIL))
+                .thenReturn(Optional.of(user1));
 
         userService.updateUser(user1.getId(), jsonUser);
 
@@ -117,4 +143,15 @@ class UserServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(user1);
     }
+
+    @Test
+    void updateUser__conflicting_user_exists() {
+        when(userRepository.findUserByUsername(EMAIL))
+                .thenReturn(Optional.of(user2));
+
+        verify(userRepository, never()).save(any());
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser));
+    }
+
+
 }
