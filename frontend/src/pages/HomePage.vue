@@ -1,8 +1,10 @@
 <template>
   <div>
     <NavBar />
-    <h1>Home</h1>
-    <p>Welcome to the home page</p>
+    <div class='col-md-8 mx-auto'>
+      <h1>Home</h1>
+      <p>Welcome to the home page</p>
+    </div>
   </div>
 </template>
 
