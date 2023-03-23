@@ -64,13 +64,13 @@ class UserServiceTest {
     @Test
     void getUserOrThrow__user_exists() {
         when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
-        assertThat(userService.getUserOrThrow(EMAIL)).isEqualTo(user1);
+        assertThat(userService.getUserByEmailOrThrow(EMAIL)).isEqualTo(user1);
     }
 
     @Test
     void getUserOrThrow__user_does_not_exist() {
         when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> userService.getUserOrThrow(EMAIL));
+        assertThatThrownBy(() -> userService.getUserByEmailOrThrow(EMAIL));
     }
 
     @Test
@@ -82,21 +82,22 @@ class UserServiceTest {
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
                 .usingRecursiveComparison()
+                .ignoringFields("id")
                 .isEqualTo(user1);
     }
 
     @Test
     void createUser__user_exists() {
-        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        when(userRepository.findUserByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
         verify(userRepository, never()).save(userArgumentCaptor.capture());
         assertThatThrownBy(() -> userService.createUser(jsonUser));
     }
 
     @Test
     void deleteUser() {
-        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
 
-        userService.deleteUser(EMAIL);
+        userService.deleteUser(user1.getId());
 
         verify(userRepository, times(1)).delete(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
@@ -107,9 +108,9 @@ class UserServiceTest {
     @Test
     void updateUser() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
-        when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.of(user1));
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
 
-        userService.updateUser(EMAIL, jsonUser);
+        userService.updateUser(user1.getId(), jsonUser);
 
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())

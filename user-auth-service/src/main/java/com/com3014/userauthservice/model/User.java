@@ -8,10 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Document("user")
 public class User implements UserDetails {
     @Id
+    private UUID id;
+
     private String username;
     private String password;
 
@@ -26,6 +29,7 @@ public class User implements UserDetails {
     public User(String username, String password, Role role,
                 String firstName, String lastName, String address) {
         super();
+        this.id = UUID.randomUUID();
         this.username = username;
         this.password = password;
         this.role = role;
@@ -72,6 +76,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public User setPassword(String password) {
