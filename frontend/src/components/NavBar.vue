@@ -11,7 +11,7 @@
             <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/"><i class="fas fa-info-circle"></i> About Us</a>
+            <a class="nav-link mx-4" href="/" ><i class="fas fa-info-circle"></i> About Us</a>
           </li>
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> User</a>
