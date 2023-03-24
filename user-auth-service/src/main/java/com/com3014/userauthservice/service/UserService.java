@@ -3,6 +3,7 @@ package com.com3014.userauthservice.service;
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonAuth;
+import com.com3014.userauthservice.model.json.JsonTokenResponse;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public String authenticateCredentials(JsonAuth jsonAuth) {
+    public JsonTokenResponse authenticateCredentials(JsonAuth jsonAuth) {
         var user = getUserByEmailOrThrow(jsonAuth.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -59,11 +60,7 @@ public class UserService implements UserDetailsService {
                         jsonAuth.getPassword()
                 )
         );
-        return jwtService.generateToken(user);
-    }
-
-    public boolean doesUserExist(String email) {
-        return getUserByEmail(email).isPresent();
+        return jwtService.generateTokenResponse(user);
     }
 
     public void deleteUser(UUID id) {
