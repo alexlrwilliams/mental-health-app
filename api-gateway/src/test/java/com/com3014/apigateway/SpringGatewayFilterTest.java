@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWireMock(port = 5002)
+@AutoConfigureWireMock(port = 5001)
 @ActiveProfiles("test")
-public class SpringGatewayAppointmentServiceRoutingTest {
+public class SpringGatewayFilterTest {
 
     @LocalServerPort
     protected int port = 0;
@@ -35,8 +35,6 @@ public class SpringGatewayAppointmentServiceRoutingTest {
 
     @BeforeEach
     public void setup() {
-        when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
-        )).thenReturn(Mono.just(true));
         this.webClient = WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofSeconds(10))
@@ -44,32 +42,43 @@ public class SpringGatewayAppointmentServiceRoutingTest {
                 .build();
 
         stubFor(
-                get(urlMatching("/api/appointments.*")).willReturn(
+                get(urlMatching("/api/users.*")).willReturn(
                         aResponse().withStatus(HttpStatus.OK.value())));
     }
 
     @Test
-    public void appointment_route__successful() {
+    public void users_route__token_invalid() {
+        when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
+        )).thenReturn(Mono.just(false));
         webClient
                 .get()
-                .uri("/api/appointments")
+                .uri("/api/users")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer 123456789")
                 .header("email", "alex@gmail.com")
                 .exchange()
                 .expectStatus()
-                .is2xxSuccessful();
+                .is4xxClientError();
     }
 
     @Test
-    public void other_route__unsuccessful() {
+    public void users_route__email_header_missing() {
         webClient
                 .get()
-                .uri("/api/users/test")
+                .uri("/api/users")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer 123456789")
+                .exchange()
+                .expectStatus()
+                .is4xxClientError();
+    }
+
+    @Test
+    public void users_route__auth_header_missing() {
+        webClient
+                .get()
+                .uri("/api/users")
                 .header("email", "alex@gmail.com")
                 .exchange()
                 .expectStatus()
-                .is5xxServerError();
+                .is4xxClientError();
     }
-
 }

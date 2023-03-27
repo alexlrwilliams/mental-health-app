@@ -3,12 +3,10 @@ package com.com3014.apigateway;
 import com.com3014.apigateway.exceptions.InvalidTokenException;
 import com.com3014.apigateway.exceptions.MissingHeaderException;
 import com.com3014.apigateway.model.TokenValidationRequest;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -18,12 +16,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     private final RouteSecurity routeSecurity;
 
-    @Value("${user-auth-service-uri}")
-    private String AUTH_SERVICE_BASE_URI;
+    private final AuthenticationService authenticationService;
 
-    public AuthenticationFilter(RouteSecurity routeSecurity) {
+    public AuthenticationFilter(RouteSecurity routeSecurity, AuthenticationService authenticationService) {
         super(Config.class);
         this.routeSecurity = routeSecurity;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -50,14 +48,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             String jwtToken = authHeader.split(" ")[1].trim();
 
-            TokenValidationRequest tokenValidationRequest = new TokenValidationRequest(emailHeader, jwtToken);
+            var tokenValidationRequest = new TokenValidationRequest(emailHeader, jwtToken);
 
-            Mono<Boolean> tokenIsValid = WebClient.create(AUTH_SERVICE_BASE_URI)
-                    .post()
-                    .uri("/api/auth/validate")
-                    .bodyValue(tokenValidationRequest)
-                    .retrieve()
-                    .bodyToMono(Boolean.class);
+            Mono<Boolean> tokenIsValid = authenticationService.validateToken(tokenValidationRequest);
 
             return tokenIsValid.flatMap(valid -> {
                 if (!valid) {
