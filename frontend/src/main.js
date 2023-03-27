@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Home from './pages/HomePage.vue'
 import Login from './pages/LoginPage.vue'
 import Register from './pages/RegisterPage.vue'
+import BookAppointmentForm from './pages/BookAppointmentForm.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -23,7 +24,8 @@ Vue.use(IconsPlugin)
 const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
-  { path: '/register', component: Register }
+  { path: '/register', component: Register },
+  { path: '/bookAppointmentForm', component: BookAppointmentForm }
 ]
 
 const router = new VueRouter({
