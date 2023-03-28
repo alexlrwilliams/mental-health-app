@@ -1,74 +1,91 @@
 <template>
   <div>
     <NavBar />
-  <div class="booking-section">
-    <b-card class="booking-section-form">
-      <b-card-header>
-        <h4><b>Book your appointment:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b>. Please fill in the forms below to book your appointment:</p>
-        <h5><b>Section 01:</b></h5> 
-        <p>On the textbox below, could you please tell us more about the issue ?</p>
-      </b-card-header>
-      <b-card-body>
-        <b-form @submit.prevent="" >
-          <b-form-group id="address-group"
-                        label="Description of symptoms:*"
-                        label-for="description-input">
-            <b-form-textarea id="description-input"
-                          class="description-textarea"
-                          v-model="description"
-                          type="text"
-                          required></b-form-textarea>
-          </b-form-group>
+  <div @submit.prevent="login">
+    <div class="booking-section">
+            <b-card class="booking-section-form">
+            <b-card-header>
+                <h4><b>Book your appointment:</b></h4>
+                <p>Welcome to <b>EvenBetterHealth</b>. Please fill in the forms below to book your appointment:</p>
+                <h5><b>Section 01:</b></h5> 
+                <p>On the textbox below, could you please tell us more about the issue ?</p>
+            </b-card-header>
+            <b-card-body>
+                <b-form @submit.prevent="" >
+                <b-form-group id="address-group"
+                                label="Description of symptoms:*"
+                                label-for="description-input">
+                    <b-form-textarea id="description-input"
+                                class="description-textarea"
+                                v-model="description"
+                                type="text"
+                                required></b-form-textarea>
+                </b-form-group>
 
-          <div class="booking-section-btn">
-            <b-button variant="primary" class='booking-section-btn-proceed' v-model="type">Proceed to calendar</b-button>
-          </div>
-        </b-form>
-      </b-card-body>
-    </b-card>
-  </div>
+                <div class="booking-section-btn">
+                    <b-button variant="primary" class='booking-section-btn-proceed' v-model="type">Proceed to calendar</b-button>
+                </div>
+                </b-form>
+            </b-card-body>
+            </b-card>
+    </div>
 
     <div class="booking-section">
-    <b-card class="booking-section-form">
-      <b-card-header>
-        <h5><b>Section 02:</b></h5> 
-        <p>Please chose your availability using the calendar below: </p>
-      </b-card-header>
-      <b-card-body>
+        <b-card class="booking-section-form">
+        <b-card-header>
+            <h5><b>Section 02:</b></h5> 
+            <p>Please chose your availability using the calendar below: </p>
+        </b-card-header>
+        <b-card-body>
 
-        <b-form @submit.prevent="" >
-          <b-calendar block locale="en-US" v-model="selectedDate" @input="saveSelectedDate"></b-calendar>
-        </b-form>
+            <b-form @submit.prevent="" >
+            <b-calendar block locale="en-US" v-model="selectedDate" @input="saveSelectedDate"></b-calendar>
+            </b-form>
 
-        <div class="booking-section-btn">
-            <b-button variant="primary" class='booking-section-btn-proceed'>Proceed to meeting types</b-button>
-        </div>
-      </b-card-body>
-    </b-card>
-  </div>
+            <div class="booking-section-btn">
+                <b-button variant="primary" class='booking-section-btn-proceed'>Proceed to meeting types</b-button>
+            </div>
+        </b-card-body>
+        </b-card>
+    </div>
 
     <div class="booking-section">
-    <b-card class="booking-section-form">
-      <b-card-header>
-        <h5><b>Section 03:</b></h5> 
-        <p>How do you wish to contact your doctor ? Please pick one of the following options:</p>
-      </b-card-header>
-      <b-card-body>
+        <b-card class="booking-section-form">
+            <b-card-header>
+                <h5><b>Section 03:</b></h5> 
+                <p>How do you wish to contact your doctor ? Please pick one of the following options:</p>
+            </b-card-header>
+            <b-card-body>
 
-        <b-form @submit.prevent="" >
-            <b-button type="button" class="btn btn-square-md" id='call' variant="light"><h3>Chat <b-icon-chat-dots-fill></b-icon-chat-dots-fill></h3></b-button>
-            <b-button type="button" class="btn btn-square-md" id='video' variant="light"><h3>Video call <b-icon-camera-video-fill></b-icon-camera-video-fill></h3></b-button>
-        </b-form>
-        
-        <div class="booking-section-btn">
-            <b-button variant="primary" class='booking-section-btn-proceed'>Proceed to doctors list</b-button>
-        </div>
-      </b-card-body>
-    </b-card>
-  </div>
+                <b-form @submit.prevent="" >
+                    <b-button type="button" class="btn btn-square-md" id='call' variant="light"><h3>Chat <b-icon-chat-dots-fill></b-icon-chat-dots-fill></h3></b-button>
+                    <b-button type="button" class="btn btn-square-md" id='video' variant="light"><h3>Video call <b-icon-camera-video-fill></b-icon-camera-video-fill></h3></b-button>
+                </b-form>
+                
+                <div class="booking-section-btn">
+                    <b-button variant="primary" class='booking-section-btn-proceed'>Proceed to doctors list</b-button>
+                </div>
+            </b-card-body>
+        </b-card>
+    </div>
 
-  </div>
+    <div class="booking-section">
+        <b-card class="booking-section-form">
+            <b-card-header>
+                <h5><b>Section 04:</b></h5> 
+                <p>Please select your doctor based on the following availabilities:</p>
+            </b-card-header>
+            <b-card-body>
+
+            </b-card-body>
+        </b-card>
+    </div>
+
+    <div class="booking-section-btn">
+        <b-button type="submit" variant="success" class='booking-section-btn-proceed'>Book appointment</b-button><br>
+    </div>
+ </div>
+</div>
 </template>
 
 <script>
@@ -90,6 +107,9 @@ export default {
   methods: {
     saveSelectedDate() {
       this.savedDate = this.selectedDate;
+    },
+    book() {
+
     }
   }
 }
