@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - cache:/data
+  user-auth-service:
+    container_name: user-auth-service
+    image: alexwilliams2001/group13-docker-repo:user-auth-service
+  api-gateway:
+    container_name: api-gateway
+    image: alexwilliams2001/group13-docker-repo:api-gateway
+    ports:
+      - "8081:8081"
+volumes:
+  cache:
+    driver: local

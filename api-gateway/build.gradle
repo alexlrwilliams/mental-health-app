@@ -29,6 +29,11 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+tasks {
+	test {
+		useJUnitPlatform()
+	}
+	bootJar {
+		archiveFileName.set("${rootProject.name}.jar")
+	}
 }
