@@ -14,7 +14,6 @@ import 'jquery/dist/jquery.min.js'
 import 'popper.js/dist/popper.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
-
 Vue.use(VueRouter)
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
