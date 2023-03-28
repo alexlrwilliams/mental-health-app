@@ -138,7 +138,7 @@ export default {
     align-items: center;
   }
     .booking-section-btn-proceed {
-    width:70%;
+    width:50%;
     border-radius: 10px;
     margin-top: 20px
   }
