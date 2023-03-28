@@ -39,7 +39,15 @@
         <b-card-body>
 
             <b-form @submit.prevent="" >
+            <h4>Date:</h4>
             <b-calendar block locale="en-US" v-model="selectedDate" @input="saveSelectedDate"></b-calendar>
+            <h4>Time:</h4>
+            <b-row class='time'>
+              <b-col md="auto">
+                <b-time v-model="selectedTime" locale="en" @context="saveSelectedTime"></b-time>
+              </b-col>
+            </b-row>
+
             </b-form>
 
             <div class="booking-section-btn">
@@ -97,6 +105,7 @@ export default {
       description: '',
       selectedDate: '',
       savedDate: '',
+      selectedTime: '', 
       type: ''
     }
   },
@@ -107,6 +116,9 @@ export default {
   methods: {
     saveSelectedDate() {
       this.savedDate = this.selectedDate;
+    },
+    saveSelectedTime() {
+
     },
     book() {
 
@@ -142,6 +154,11 @@ export default {
     border-radius: 10px;
     margin-top: 20px
   }
+  .time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
     .call {
         margin-right: 2px;
     }
