@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
+  user-auth-service:
+    container_name: user-auth-service
+    image: alexwilliams2001/group13-docker-repo:user-auth-service
+    ports:
+      - "8082:8082"
+volumes:
+  cache:
+    driver: local
