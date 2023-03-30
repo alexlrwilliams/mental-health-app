@@ -1,7 +1,12 @@
 version: '3.9'
 
 services:
-  appointment-service:
-    image: alexwilliams2001/group13-docker-repo:appointment-service
+  cache:
+    image: redis:6.2-alpine
     ports:
-      - "8080:8080"
+      - '6379:6379'
+    volumes:
+      - cache:/data
+volumes:
+  cache:
+    driver: local

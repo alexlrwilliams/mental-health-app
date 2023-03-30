@@ -2,9 +2,15 @@ package com.com3014.userauthservice.service;
 
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
 import com.com3014.userauthservice.model.User;
+import com.com3014.userauthservice.model.json.JsonAuth;
+import com.com3014.userauthservice.model.json.JsonTokenResponse;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,14 +21,18 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public List<User> getAllUsers() {
@@ -40,6 +50,17 @@ public class UserService {
                 jsonUser.getAddress()
         );
         return userRepository.save(user);
+    }
+
+    public JsonTokenResponse authenticateCredentials(JsonAuth jsonAuth) {
+        var user = getUserByEmailOrThrow(jsonAuth.getEmail());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        jsonAuth.getEmail(),
+                        jsonAuth.getPassword()
+                )
+        );
+        return jwtService.generateTokenResponse(user);
     }
 
     public void deleteUser(UUID id) {
@@ -81,6 +102,11 @@ public class UserService {
 
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findUserByUsername(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        return getUserByEmailOrThrow(email);
     }
 
     private String encryptPassword(String password) {

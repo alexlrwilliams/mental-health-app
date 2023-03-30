@@ -9,7 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +26,9 @@ class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private MockHttpServletRequest request;
 
     @InjectMocks
     private UserController userController;
@@ -39,7 +48,17 @@ class UserControllerTest {
     @Test
     void createUser() {
         when(userService.createUser(jsonUser)).thenReturn(user1);
-        assertThat(userController.createUser(jsonUser)).isEqualTo(user1);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(user1.getUsername())
+                .toUri();
+
+        ResponseEntity<User> response = ResponseEntity
+                .created(location)
+                .body(user1);
+        assertThat(userController.createUser(jsonUser)).isEqualTo(response);
     }
 
     @Test
