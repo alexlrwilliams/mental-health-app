@@ -5,7 +5,7 @@
     <div class='col-md-8 mx-auto'>
 
       <div class="center">
-        <b-button class="book-appointment-btn" variant='primary' href='/bookAppointementForm' ><h4>Book an appointment</h4></b-button>
+        <b-button class="book-appointment-btn" variant='primary' href='/bookAppointmentForm' ><h4>Book an appointment</h4></b-button>
       </div>
 
       <div class="appointment-box">
