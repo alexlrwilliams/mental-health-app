@@ -5,12 +5,11 @@ import VueRouter from 'vue-router'
 import Home from './pages/HomePage.vue'
 import Login from './pages/LoginPage.vue'
 import Register from './pages/RegisterPage.vue'
-import BookAppointmentForm from './pages/BookAppointmentForm.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
-import 'jquery/dist/jquery.min.js'
+import BookAppointmentPage from "@/pages/BookAppointmentPage.vue";
 
 Vue.use(VueRouter)
 // Make BootstrapVue available throughout your project
@@ -22,7 +21,7 @@ const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/bookAppointmentForm', component: BookAppointmentForm }
+  { path: '/book-appointment', component: BookAppointmentPage }
 ]
 
 const router = new VueRouter({
