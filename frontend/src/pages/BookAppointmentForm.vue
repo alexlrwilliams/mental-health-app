@@ -44,7 +44,7 @@
             <h4>Time:</h4>
             <b-row class='time'>
               <b-col md="auto">
-                <b-time v-model="selectedTime" locale="en" @context="saveSelectedTime"></b-time>
+                <b-time v-model="selectedTime" minutes-step="15" locale="en" @context="saveSelectedTime"></b-time>
               </b-col>
             </b-row>
 
