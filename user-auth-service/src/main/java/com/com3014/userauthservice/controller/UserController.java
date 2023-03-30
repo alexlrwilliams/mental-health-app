@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,19 +29,19 @@ public class UserController {
         return userService.createUser(jsonUser);
     }
 
-    @GetMapping("/{email}")
-    public User getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable UUID id) {
+        return userService.getUserByIdOrThrow(id);
     }
 
-    @DeleteMapping("/{email}")
-    public void deleteUser(@PathVariable String email) {
-        userService.deleteUser(email);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable UUID id) {
+        userService.deleteUser(id);
     }
 
-    @PutMapping("/{email}")
-    public User updateUser(@PathVariable String email,
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable UUID id,
                            @RequestBody JsonUser jsonUser) {
-        return userService.updateUser(email, jsonUser);
+        return userService.updateUser(id, jsonUser);
     }
 }

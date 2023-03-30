@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.com3014.userauthservice.UnitTestHelper.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -44,20 +43,20 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserByEmail() {
-        when(userService.getUserByEmail(EMAIL)).thenReturn(user1);
-        assertThat(userController.getUserByEmail(EMAIL)).isEqualTo(user1);
+    void getUserById() {
+        when(userService.getUserByIdOrThrow(user1.getId())).thenReturn(user1);
+        assertThat(userController.getUserById(user1.getId())).isEqualTo(user1);
     }
 
     @Test
     void deleteUser() {
-        userController.deleteUser(EMAIL);
-        verify(userService, times(1)).deleteUser(EMAIL);
+        userController.deleteUser(user1.getId());
+        verify(userService, times(1)).deleteUser(user1.getId());
     }
 
     @Test
     void updateUser() {
-        when(userService.updateUser(EMAIL, jsonUser)).thenReturn(user1);
-        assertThat(userController.updateUser(EMAIL, jsonUser)).isEqualTo(user1);
+        when(userService.updateUser(user1.getId(), jsonUser)).thenReturn(user1);
+        assertThat(userController.updateUser(user1.getId(), jsonUser)).isEqualTo(user1);
     }
 }
