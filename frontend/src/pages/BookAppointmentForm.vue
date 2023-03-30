@@ -66,8 +66,8 @@
             <b-card-body>
 
                 <b-form @submit.prevent="" >
-                    <b-button type="button" class="btn btn-square-md" id='call' variant="light"><h3>Chat <b-icon-chat-dots-fill></b-icon-chat-dots-fill></h3></b-button>
-                    <b-button type="button" class="btn btn-square-md" id='video' variant="light"><h3>Video call <b-icon-camera-video-fill></b-icon-camera-video-fill></h3></b-button>
+                    <b-button v-model="type" class="btn btn-square-md" id='call' :variant="buttonVariantCall" @click="toggleButtonCall"><h3>Chat <b-icon-chat-dots-fill></b-icon-chat-dots-fill></h3></b-button>
+                    <b-button v-model="type" class="btn btn-square-md" id='video' :variant="buttonVariantVideo" @click="toggleButtonVideo"><h3>Video call <b-icon-camera-video-fill></b-icon-camera-video-fill></h3></b-button>
                 </b-form>
                 
                 <div class="booking-section-btn">
@@ -103,10 +103,16 @@ export default {
   data() {
     return {
       description: '',
+
       selectedDate: '',
       savedDate: '',
       selectedTime: '', 
-      type: ''
+
+      type: '',
+      buttonVariantCall: 'light',
+      buttonVariantVideo: 'light',
+      isClickedCall: false,
+      isClickedVideo: false
     }
   },
   name: 'BookAppointmentForm',
@@ -119,6 +125,22 @@ export default {
     },
     saveSelectedTime() {
 
+    },
+    toggleButtonCall() {
+      if (!this.isClickedCall) {
+        this.isClickedCall = true
+        this.isClickedVideo = false
+        this.buttonVariantCall = 'primary'
+        this.buttonVariantVideo = 'light'
+      }
+    },
+    toggleButtonVideo() {
+      if (!this.isClickedVideo) {
+        this.isClickedVideo = true
+        this.isClickedCall = false
+        this.buttonVariantVideo = 'primary'
+        this.buttonVariantCall = 'light'
+      }
     },
     book() {
 
@@ -158,13 +180,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-    .call {
-        margin-right: 2px;
-    }
-    .video {
-        margin-left: 2px;
-    }
+  }
 
   .btn-square-md {
     width: 150px !important;
@@ -178,7 +194,7 @@ export default {
     border-radius: 15px;
     margin-left: 30%;
 }
-#video {
+  #video {
     margin-left: 60px;
-}
+  }
 </style>
