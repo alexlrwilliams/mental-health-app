@@ -1,7 +1,12 @@
 package com.com3014.userauthservice.model.json;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class TokenValidationRequest {
+    @Email
     private String email;
+    @NotBlank
     private String token;
 
     public TokenValidationRequest(String email, String token) {
