@@ -45,6 +45,11 @@ public class UserController {
         return userService.getUserByIdOrThrow(id);
     }
 
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmailOrThrow(email);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
