@@ -28,7 +28,7 @@
 
           <div class="login-form__buttons">
             <b-button type="submit" variant="success" class='login-form__login'>Log in</b-button> 
-            <b-button href='/register' variant="primary" class='login-form__signup'>Register an account</b-button>
+            <b-button to='/register' variant="primary" class='login-form__signup'>Register an account</b-button>
           </div>
           
         </b-form>
