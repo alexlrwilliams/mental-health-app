@@ -7,7 +7,7 @@
                 <h4>Upcoming appointments <span class="upcoming-dot"></span></h4>
               </b-card-header>
               <b-card-body>
-
+                <UpcomingTicket />
               </b-card-body>
       </b-card>
 
@@ -16,7 +16,7 @@
                 <h4>Previous appointments <span class="previous-dot"></span></h4>
               </b-card-header>
               <b-card-body>
-
+                <PreviousTicket />
               </b-card-body>
       </b-card>
 
@@ -26,8 +26,14 @@
 </template>
 
 <script>
+import UpcomingTicket from '../components/UpcomingTicket.vue';
+import PreviousTicket from '../components/PreviousTicket.vue';
 export default {
-  name: 'HomePage'
+  name: 'HomePage', 
+  components: {
+    UpcomingTicket,
+    PreviousTicket
+  },
 }
 </script>
 
