@@ -58,6 +58,7 @@
     </AppointmentBookingSection>
 
     <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
+        <AvailableDocTicket /> 
     </AppointmentBookingSection>
     <div class="booking-section-btn">
         <b-button type="submit" variant="success" class='booking-section-btn-proceed' :disabled="!section3Complete">Book appointment</b-button><br>
@@ -68,9 +69,13 @@
 
 <script>
 import AppointmentBookingSection from "@/components/AppointmentBookingSection.vue";
+import AvailableDocTicket from "@/components/AvailableDocTicket.vue";
 
 export default {
-  components: {AppointmentBookingSection},
+  components: {
+    AppointmentBookingSection, 
+    AvailableDocTicket
+  },
   data() {
     return {
       section1Complete: false,

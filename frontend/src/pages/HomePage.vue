@@ -7,7 +7,7 @@
                 <h4>Upcoming appointments <span class="upcoming-dot"></span></h4>
               </b-card-header>
               <b-card-body>
-                <UpcomingTicket />
+                <UpcomingTicket /> 
               </b-card-body>
       </b-card>
 
