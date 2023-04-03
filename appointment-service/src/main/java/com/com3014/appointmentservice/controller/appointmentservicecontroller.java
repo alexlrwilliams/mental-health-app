@@ -30,12 +30,6 @@ public class appointmentservicecontroller
         this.appointmentservice = appointmentservice;
     }
 
-    @GetMapping()
-    public List<Appointment> getAllAppointments()
-    {
-        return appointmentservice.getAllAppointments();
-    }
-   
     @PostMapping
     public Appointment createAppointment(@RequestBody AppointmentJson json)
     {
@@ -69,12 +63,12 @@ public class appointmentservicecontroller
     }
     @GetMapping("/Type")
 
-    public List<Appointment> getAppointmentByType(String Type)
+    public List<Appointment> findByType(String Type)
     {
-        return appointmentservice.getAppointmentByType(Type);
+        return appointmentservice.findByType(Type);
     }
-    public List<Appointment> getfindByStartTimeAfterAndEndTimeBefore(Time appointmentStartTime,Time appointmentEndTime)
+    public List<Appointment> getfindByStartTimeAfterAndEndTimeBefore(Time StartTime,Time EndTime)
     {
-        return appointmentservice.getfindByStartTimeAfterAndEndTimeBefore(appointmentStartTime,appointmentEndTime);
+        return appointmentservice.getfindByStartTimeAfterAndEndTimeBefore(StartTime,EndTime);
     }
 }

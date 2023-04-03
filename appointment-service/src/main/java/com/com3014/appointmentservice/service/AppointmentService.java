@@ -14,15 +14,8 @@ public class AppointmentService {
 
  @Autowired
  AppointmentRepository appointmentrepo ;
-
-
-
-    public List<Appointment> getAllAppointments()
-    {
-        return appointmentrepo.findAll();
-    }
-
-    public Optional<Appointment> getAppointmentById(UUID id)
+ 
+ public Optional<Appointment> getAppointmentById(UUID id)
     {
         return appointmentrepo.findById(id);
     }
@@ -32,8 +25,8 @@ public class AppointmentService {
         var appointment = new Appointment(
             json.getid(),
             json.getDOC_ID(),
-            json.getappointmentStartTime(),
-            json.getappointmentEndTime(),
+            json.getStartTime(),
+            json.getEndTime(),
             json.getPatient_ID(),
             json.getsummary(),
             json.getType(),
@@ -46,8 +39,8 @@ public class AppointmentService {
     public Appointment updateappointment(UUID id,AppointmentJson json) {
         var appointment = getappointmentByIdorThrow(id);
         
-        ((Appointment) appointment).setappointmentStartTime(json.getappointmentStartTime());
-        ((Appointment) appointment).setappointmentEndTime(json.getappointmentEndTime());
+        ((Appointment) appointment).setStartTime(json.getStartTime());
+        ((Appointment) appointment).setEndTime(json.getEndTime());
         ((Appointment) appointment).setsummary(json.getsummary());
         ((Appointment) appointment).setType(json.getType());
         ((Appointment) appointment).setStatus(json.getStatus());
@@ -78,15 +71,14 @@ public class AppointmentService {
         return appointmentrepo.findById(Patient_ID);
     }
 
+   public List<Appointment> findByType(String Type)
+   {
+    return appointmentrepo.findByType(Type);
+   }
+
    
-
-    public List<Appointment> getAppointmentByType(String Type)
+    public List<Appointment> getfindByStartTimeAfterAndEndTimeBefore(Time StartTime,Time EndTime)
     {
-        return appointmentrepo.getAllAppointments(Type);
-    }
-
-    public List<Appointment> getfindByStartTimeAfterAndEndTimeBefore(Time appointmentStartTime,Time appointmentEndTime)
-    {
-       return appointmentrepo.findByStartTimeAfterAndEndTimeBefore(appointmentStartTime,appointmentEndTime);
+       return appointmentrepo.findByStartTimeAfterAndEndTimeBefore(StartTime,EndTime);
     } 
 }

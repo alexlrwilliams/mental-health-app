@@ -10,7 +10,7 @@ public interface AppointmentRepository extends MongoRepository<Appointment,UUID>
 {
     Optional<Appointment> findAppointmentByid(UUID id);
 
-    List<Appointment> getAllAppointments(String type);
+    List<Appointment> findByType(String Type);
 
-    List<Appointment> findByStartTimeAfterAndEndTimeBefore(Time appointmentStartTime,Time appointmentEndTime);
+    List<Appointment> findByStartTimeAfterAndEndTimeBefore(Time StartTime,Time EndTime);
 }

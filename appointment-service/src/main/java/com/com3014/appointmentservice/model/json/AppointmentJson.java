@@ -10,19 +10,19 @@ public class AppointmentJson
     @Id
      private UUID id;
      private UUID DOC_ID;
-     private Time appointmentStartTime;
-     private Time appointmentEndTime;
+     private Time StartTime;
+     private Time EndTime;
      private UUID Patient_ID;
      private String summary;
      private String Type;
      private String Status;
 
-     public AppointmentJson(UUID id,UUID DOC_ID,Time appointmentStartTime, Time appointmentEndTime,UUID Patient_ID,String summary,String Type,String Status)
+     public AppointmentJson(UUID id,UUID DOC_ID,Time StartTime, Time EndTime,UUID Patient_ID,String summary,String Type,String Status)
      {  
         this.id=UUID.randomUUID();
         this.DOC_ID=UUID.randomUUID();
-        this.appointmentStartTime = appointmentStartTime;
-        this.appointmentEndTime = appointmentEndTime;
+        this.StartTime = StartTime;
+        this.EndTime = EndTime;
         this.Patient_ID=UUID.randomUUID();
         this.summary = summary;
         this.Type = Type;
@@ -43,20 +43,20 @@ public class AppointmentJson
      {
         this.DOC_ID =DOC_ID;
      }
-     public Time getappointmentStartTime()
+     public Time getStartTime()
      {
-        return appointmentStartTime;
+        return StartTime;
      }
-     public void setappointmentStartTime(Time appointmentStartTime)
+     public void setStartTime(Time StartTime)
      {
-        this.appointmentStartTime= appointmentStartTime;
+        this.StartTime= StartTime;
      }
-     public Time getappointmentEndTime(){
-        return appointmentEndTime;
+     public Time getEndTime(){
+        return EndTime;
      }
-     public void setappointmentEndTime(Time appointmentEndTime)
+     public void setEndTime(Time EndTime)
      {
-        this.appointmentEndTime = appointmentEndTime;
+        this.EndTime = EndTime;
      }
      public UUID getPatient_ID(){
         return Patient_ID;
