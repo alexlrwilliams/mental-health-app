@@ -57,7 +57,7 @@ class UserControllerTest {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(user1.getUsername())
+                .buildAndExpand(user1.getId())
                 .toUri();
 
         ResponseEntity<User> response = ResponseEntity
@@ -70,12 +70,19 @@ class UserControllerTest {
     void createUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
         assertThatThrownBy(() -> userController.createUser(jsonUser, bindingResult));
+        verify(userService, never()).createUser(any());
     }
 
     @Test
     void getUserById() {
         when(userService.getUserByIdOrThrow(user1.getId())).thenReturn(user1);
         assertThat(userController.getUserById(user1.getId())).isEqualTo(user1);
+    }
+
+    @Test
+    void getUserByEmail() {
+        when(userService.getUserByEmailOrThrow(user1.getUsername())).thenReturn(user1);
+        assertThat(userController.getUserByEmail(user1.getUsername())).isEqualTo(user1);
     }
 
     @Test
@@ -94,5 +101,6 @@ class UserControllerTest {
     void updateUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
         assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUser, bindingResult));
+        verify(userService, never()).updateUser(any(),any());
     }
 }

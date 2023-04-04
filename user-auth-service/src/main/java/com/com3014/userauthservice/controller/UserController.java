@@ -42,7 +42,7 @@ public class UserController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(user.getUsername())
+                .buildAndExpand(user.getId())
                 .toUri();
         return ResponseEntity
                 .created(location)

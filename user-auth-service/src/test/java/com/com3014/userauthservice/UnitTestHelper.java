@@ -1,8 +1,20 @@
 package com.com3014.userauthservice;
 
 import com.com3014.userauthservice.model.Role;
+import com.com3014.userauthservice.model.TokenType;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Date;
+
+import static com.com3014.userauthservice.service.JwtService.TOKEN_ID_KEY;
+import static com.com3014.userauthservice.service.JwtService.TOKEN_TYPE_CLAIM_KEY;
 
 public class UnitTestHelper {
 
@@ -24,7 +36,5 @@ public class UnitTestHelper {
 
     public static final JsonUser jsonUser = new JsonUser(EMAIL, PASSWORD, ROLE_1, FIRST_NAME, LAST_NAME, ADDRESS);
     public static final User testUser1 = new User(EMAIL, PASSWORD, ROLE_1, FIRST_NAME, LAST_NAME, ADDRESS);
-    public static final User testUser2 = new User(EMAIL_2, PASSWORD, ROLE_2, FIRST_NAME_2, LAST_NAME_2, ADDRESS);;
-
-
+    public static final User testUser2 = new User(EMAIL_2, PASSWORD, ROLE_2, FIRST_NAME_2, LAST_NAME_2, ADDRESS);
 }

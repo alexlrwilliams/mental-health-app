@@ -33,18 +33,14 @@ public class AuthController {
 
     private final JwtService jwtService;
 
-    private final UserDetailsService userDetailsService;
-
     private final RedisTokenRepository redisTokenRepository;
 
     @Autowired
     public AuthController(UserService userService,
                           JwtService jwtService,
-                          UserDetailsService userDetailsService,
                           RedisTokenRepository redisTokenRepository) {
         this.userService = userService;
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
         this.redisTokenRepository = redisTokenRepository;
     }
 
@@ -85,7 +81,7 @@ public class AuthController {
             throw new UserNotValidException(errors);
         }
 
-        var userDetails = userDetailsService.loadUserByUsername(tokenValidationRequest.getEmail());
+        var userDetails = userService.loadUserByUsername(tokenValidationRequest.getEmail());
         return ResponseEntity.ok(jwtService.validateAccessToken(
                 tokenValidationRequest.getToken(),
                 userDetails
@@ -99,7 +95,7 @@ public class AuthController {
             var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
             throw new UserNotValidException(errors);
         }
-        var userDetails = userDetailsService.loadUserByUsername(tokenValidationRequest.getEmail());
+        var userDetails = userService.loadUserByUsername(tokenValidationRequest.getEmail());
         return ResponseEntity.ok(jwtService.refreshAccessToken(
                 tokenValidationRequest.getToken(),
                 userDetails
@@ -113,7 +109,7 @@ public class AuthController {
             var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
             throw new UserNotValidException(errors);
         }
-        var userDetails = userDetailsService.loadUserByUsername(tokenValidationRequest.getEmail());
+        var userDetails = userService.loadUserByUsername(tokenValidationRequest.getEmail());
         var valid = jwtService.validateAccessToken(
                 tokenValidationRequest.getToken(),
                 userDetails
