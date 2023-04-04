@@ -7,7 +7,7 @@
                 <h4>Upcoming appointments <span class="upcoming-dot"></span></h4>
               </b-card-header>
               <b-card-body>
-                <UpcomingTicket /> 
+                  <AppointmentTicket v-for="(appointment, index) in upcomingAppointments" :key="index" :appointment="appointment" />
               </b-card-body>
       </b-card>
 
@@ -16,7 +16,7 @@
                 <h4>Previous appointments <span class="previous-dot"></span></h4>
               </b-card-header>
               <b-card-body>
-                <PreviousTicket />
+                <AppointmentTicket v-for="(appointment, index) in previousAppointments" :key="index" :appointment="appointment" />
               </b-card-body>
       </b-card>
 
@@ -25,7 +25,7 @@
                 <h4 class="cancelled-title">Cancelled appointments:</h4>
               </b-card-header>
               <b-card-body>
-                <PreviousTicket />
+                <AppointmentTicket v-for="(appointment, index) in cancelledAppointments" :key="index" :appointment="appointment"/>
               </b-card-body>
       </b-card>
 
@@ -34,14 +34,46 @@
 </template>
 
 <script>
-import UpcomingTicket from '../components/UpcomingTicket.vue';
-import PreviousTicket from '../components/PreviousTicket.vue';
+import AppointmentTicket from '../components/AppointmentTicket.vue';
 export default {
   name: 'HomePage', 
   components: {
-    UpcomingTicket,
-    PreviousTicket
+    AppointmentTicket,
   },
+  data() {
+    return {
+      upcomingAppointments: [
+        {
+          date: "Wednesday, April the 11th, 2023 - 03:15pm",
+          doctor: "Ahmed Henine",
+          status: "upcoming",
+        },
+        {
+          date: "Friday, April the 7th, 2023 - 09:00am",
+          doctor: "Alex Williams",
+          status: "upcoming",
+        }
+      ], 
+      previousAppointments: [
+        {
+          date: "Tuesday, March the 21st, 2023 - 04:15pm",
+          doctor: "Jenny Maria",
+          status: "previous",
+        },
+        {
+          date: "Monday, March the 13th, 2023 - 012:30pm",
+          doctor: "Karthi",
+          status: "previous",
+        }
+      ], 
+      cancelledAppointments: [
+        {
+          date: "Friday, April the 14th, 2023 - 10:45am",
+          doctor: "Al-Ayhem",
+          status: "cancelled",
+        } 
+      ] 
+  }},
 }
 </script>
 
