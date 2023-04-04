@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class JsonUser {
     @Email
+    @NotBlank
     private String email;
     @NotBlank
     private String password;
