@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class JsonAuth {
     @Email
+    @NotBlank
     private String email;
     @NotBlank
     private String password;
