@@ -1,27 +1,8 @@
 <template>
     <b-form-radio-group>
         <div class="row">
-            <b-card class="available-doc-ticket">
-
-                <h5>Dr. Ahmed Henine</h5> 
-                <p>Surrey Royal Hospital (Guildford)</p>
-            </b-card>
-
-            <b-card class="available-doc-ticket">
-       
-                <h5>Dr. Alex Williams</h5> 
-                <p>Kingstong Hospital (London)</p>
-            </b-card>
-
-            <b-card class="available-doc-ticket">
-                <h5>Dr. Jeniffer Maria</h5> 
-                <p>Broadgreen Hospital (London)</p>
-            </b-card>
-
-            <b-card class="available-doc-ticket">
-                <h5>Dr. Karthik Satheesh Thampi</h5> 
-                <p>Brighton Hospital (Brighton)</p>
-            </b-card>
+            <b-form-radio class="btn appointment-type-radios__radio-item" ><h4>Dr. Ahmed Henine </h4> <p>Royal Hospital (Guildford)</p></b-form-radio>
+            <b-form-radio class="btn appointment-type-radios__radio-item" ><h4>Dr. Alex Williams </h4> <p>Kingstong Hospital (London)</p></b-form-radio>
         </div>
     </b-form-radio-group>
 </template>
@@ -31,13 +12,24 @@
     width: 47%;
 
 }
-
 .card {
   margin-right: 20px;
   margin-bottom: 20px;
 }
-input[type="radio"] {
-  width: 30px;
-  height: 20px;
-}
+  .appointment-type-radios {
+    display: flex;
+    justify-content: center;
+  }
+  .appointment-type-radios__radio-item {
+    width: 47%;
+
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    display: inline-block;
+    padding: 5px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
 </style>

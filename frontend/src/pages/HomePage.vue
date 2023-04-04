@@ -20,7 +20,15 @@
               </b-card-body>
       </b-card>
 
-      
+      <b-card class="appointment-box">
+              <b-card-header>
+                <h4 class="cancelled-title">Cancelled appointments:</h4>
+              </b-card-header>
+              <b-card-body>
+                <PreviousTicket />
+              </b-card-body>
+      </b-card>
+
     </div>
   </div>
 </template>
@@ -51,7 +59,6 @@ export default {
   .appointment-box {
     width: calc(100% - 10px);
     margin: 0 auto;
-    margin-bottom: 15px;
   }
   .upcoming-dot {
     height: 13px;
@@ -66,5 +73,8 @@ export default {
     background-color: rgb(192, 15, 15);
     border-radius: 50%;
     display: inline-block;
+  }
+  .cancelled-title {
+    color: brown;
   }
 </style>
