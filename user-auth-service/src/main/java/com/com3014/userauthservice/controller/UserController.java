@@ -1,10 +1,14 @@
 package com.com3014.userauthservice.controller;
 
+import com.com3014.userauthservice.ValidationUtils;
+import com.com3014.userauthservice.exceptions.UserNotValidException;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,7 +32,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody JsonUser jsonUser) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody JsonUser jsonUser,
+                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
+            throw new UserNotValidException(errors);
+        }
         var user = userService.createUser(jsonUser);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -57,7 +66,12 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable UUID id,
-                           @RequestBody JsonUser jsonUser) {
+                           @Valid @RequestBody JsonUser jsonUser,
+                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
+            throw new UserNotValidException(errors);
+        }
         return userService.updateUser(id, jsonUser);
     }
 }

@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,6 +28,9 @@ class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private BindingResult bindingResult;
 
     @Mock
     private MockHttpServletRequest request;
@@ -58,7 +63,13 @@ class UserControllerTest {
         ResponseEntity<User> response = ResponseEntity
                 .created(location)
                 .body(user1);
-        assertThat(userController.createUser(jsonUser)).isEqualTo(response);
+        assertThat(userController.createUser(jsonUser, bindingResult)).isEqualTo(response);
+    }
+
+    @Test
+    void createUser__user_not_valid() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        assertThatThrownBy(() -> userController.createUser(jsonUser, bindingResult));
     }
 
     @Test
@@ -76,6 +87,12 @@ class UserControllerTest {
     @Test
     void updateUser() {
         when(userService.updateUser(user1.getId(), jsonUser)).thenReturn(user1);
-        assertThat(userController.updateUser(user1.getId(), jsonUser)).isEqualTo(user1);
+        assertThat(userController.updateUser(user1.getId(), jsonUser, bindingResult)).isEqualTo(user1);
+    }
+
+    @Test
+    void updateUser__user_not_valid() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUser, bindingResult));
     }
 }
