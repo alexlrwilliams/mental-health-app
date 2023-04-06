@@ -58,7 +58,7 @@
     </AppointmentBookingSection>
 
     <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
-        <AvailableDocTicket /> 
+        <AvailableDocTicket v-for="(available, index) in availableDoctors" :key="index" :available="available"/> 
     </AppointmentBookingSection>
     <div class="booking-section-btn">
         <b-button type="submit" variant="success" class='booking-section-btn-proceed' :disabled="!section3Complete">Book appointment</b-button><br>
@@ -88,6 +88,24 @@ export default {
       selectedTime: '',
 
       appointmentType: '',
+
+      availableDoctors: [
+        {
+          doctor: 'Ahmed Henine',
+          hospital: 'Royal Hospital Guildford',
+          status: 'free',
+        },
+        {
+          doctor: 'Alex Williams',
+          hospital: 'London Hospital',
+          status: 'free',
+        },
+                {
+          doctor: 'Jenny Maria',
+          hospital: 'Manchester Hospital',
+          status: 'free',
+        } 
+      ]
     }
   },
   name: 'BookAppointmentForm',
