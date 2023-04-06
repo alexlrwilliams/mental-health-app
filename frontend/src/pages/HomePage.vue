@@ -72,7 +72,7 @@ export default {
           doctor: "Al-Ayhem",
           status: "cancelled",
         } 
-      ] 
+      ]
   }},
 }
 </script>
