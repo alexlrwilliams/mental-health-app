@@ -104,7 +104,7 @@ export default {
           doctor: 'Jenny Maria',
           hospital: 'Manchester Hospital',
           status: 'free',
-        } 
+        }
       ]
     }
   },
