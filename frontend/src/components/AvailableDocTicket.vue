@@ -1,9 +1,10 @@
-<template v-if="availableDoctors.status === 'free'">
-    <b-form-radio-group>
-        <div class="row">
-            <b-form-radio class="btn appointment-type-radios__radio-item" ><h4>Dr. {{ available.doctor }}</h4> <p>{{ available.hospital }}</p></b-form-radio>
-        </div>
-    </b-form-radio-group>
+<template>
+  <b-form-radio class="appointment-type-radios__radio-item"  :value="doctor.docId">
+    <div class="row">
+      <h4>Dr. {{ doctor.doctor }}</h4>
+      <p>{{ doctor.hospital }}</p>
+    </div>
+  </b-form-radio>
 </template>
 
 <script>
@@ -20,16 +21,10 @@ export default {
 
 <style >
 .appointment-type-radios__radio-item {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
+  flex: 0 0 50%;
+  border-radius: 0;
+  margin-left: 0 !important;
   padding: 5px;
-  margin-right: 20px;
-  margin-bottom: 20px;
 }
-.appointment-type-radios__radio-item:hover {
-  border-color: blue;
-}
+
 </style>
