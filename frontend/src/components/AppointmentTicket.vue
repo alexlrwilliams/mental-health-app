@@ -41,8 +41,7 @@ export default {
       // Format date and time to display on the ticket
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
       const start = new Date(this.appointment.startTime).toLocaleDateString(undefined, options);
-      const end = new Date(this.appointment.endTime).toLocaleTimeString(undefined, options);
-      return `${start} - ${end}`;
+      return `${start}`;
     },
     isAppointmentPrevious() {
       // Check if the appointment has ended

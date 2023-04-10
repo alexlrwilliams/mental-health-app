@@ -139,10 +139,16 @@ data() {
 computed: {
     upcomingAppointments() {
       const now = new Date();
-      return this.appointments.filter((appointment) => {
+      const filteredAppointments = this.appointments.filter((appointment) => {
         const endTime = new Date(appointment.endTime);
         return endTime > now && !appointment.cancelled;
       });
+      filteredAppointments.sort((a, b) => {
+        const aEndTime = new Date(a.endTime);
+        const bEndTime = new Date(b.endTime);
+        return aEndTime - bEndTime;
+      });
+      return filteredAppointments;
     },
     previousAppointments() {
       const now = new Date();
