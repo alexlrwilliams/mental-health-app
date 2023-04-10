@@ -135,23 +135,26 @@ data() {
         }
     ]
   }
-}, 
-  computed: {
-    formattedDate() {
-      // Format date and time to display on the ticket
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-      const start = new Date(this.appointment.startTime).toLocaleDateString(undefined, options);
-      const end = new Date(this.appointment.endTime).toLocaleTimeString(undefined, options);
-      return `${start} - ${end}`;
-    },
-    isAppointmentPrevious() {
-      // Check if the appointment has ended
+},
+computed: {
+    upcomingAppointments() {
       const now = new Date();
-      const endTime = new Date(this.appointment.endTime);
-      return endTime < now;
+      return this.appointments.filter((appointment) => {
+        const endTime = new Date(appointment.endTime);
+        return endTime > now && !appointment.cancelled;
+      });
+    },
+    previousAppointments() {
+      const now = new Date();
+      return this.appointments.filter((appointment) => {
+        const endTime = new Date(appointment.endTime);
+        return endTime < now || appointment.cancelled;
+      });
+    },
+    cancelledAppointments() {
+    return this.appointments.filter(appointment => appointment.cancelled);
     }
   }
-
 }
 </script>
 
