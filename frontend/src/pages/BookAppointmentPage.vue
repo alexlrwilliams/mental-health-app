@@ -98,11 +98,7 @@ export default {
           "username": "lmao@surrey.ac.uk",
           "firstName": "Alex",
           "lastName": "Williams",
-          "authorities": [
-            {
-              "authority": "DOCTOR"
-            }
-          ]
+          "role": "DOCTOR",
         }
       ]
 
