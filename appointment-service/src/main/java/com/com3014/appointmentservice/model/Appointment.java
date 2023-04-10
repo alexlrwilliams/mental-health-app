@@ -11,25 +11,25 @@ import java.sql.Time;
 public class Appointment {
     @Id
     private UUID id;
-    private UUID DOC_ID;
-    private Time StartTime;
-    private Time EndTime;
-    private UUID Patient_ID;
+    private UUID docId;
+    private Time startTime;
+    private Time endTime;
+    private UUID patientId;
     private String summary;
-    private String Type;
-    private String Status;
+    private String type;
+    private String status;
 
-    public Appointment(UUID id,UUID DOC_ID,Time StartTime, Time EndTime,UUID Patient_ID,String summary,String Type,String Status)
+    public Appointment(UUID id,UUID docId,Time startTime, Time endTime,UUID patientId,String summary,String type,String status)
     {  
        
        this.id=UUID.randomUUID();
-       this.DOC_ID=UUID.randomUUID();
-       this.StartTime = StartTime;
-       this.EndTime = EndTime;
-       this.Patient_ID=UUID.randomUUID();
+       this.docId=docId;
+       this.startTime = startTime;
+       this.endTime = endTime;
+       this.patientId= patientId;
        this.summary = summary;
-       this.Type = Type;
-       this.Status = Status;
+       this.type = type;
+       this.status = status;
 
     }
     public UUID getid(){
@@ -39,57 +39,47 @@ public class Appointment {
         this.id = id;
 
      }
-     public UUID getDOC_ID(){
-        return DOC_ID;
+     public UUID getdocId(){
+        return docId;
      }
-     public void setDOC_ID(UUID DOC_ID)
+     public void setdocId(UUID docId){
+        this.docId =docId;
+     }
+     public Time getstartTime(){
+        return startTime;
+     }
+     public void setstartTime(Time startTime){
+        this.startTime= startTime;
+     }
+     public Time getendTime(){
+        return endTime;
+     }
+     public void setendTime(Time endTime)
      {
-        this.DOC_ID =DOC_ID;
+        this.endTime = endTime;
      }
-     public Time getStartTime()
-     {
-        return StartTime;
+     public UUID getpatientId(){
+        return patientId;
      }
-     public void setStartTime(Time StartTime)
-     {
-        this.StartTime= StartTime;
+     public void setpatientId(UUID patientId){
+        this.patientId = patientId;
      }
-     public Time getEndTime(){
-        return EndTime;
-     }
-     public void setEndTime(Time EndTime)
-     {
-        this.EndTime = EndTime;
-     }
-     public UUID getPatient_ID(){
-        return Patient_ID;
-     }
-     public void setPatient_ID(UUID Patient_ID)
-     {
-        this.Patient_ID = Patient_ID;
-     }
-     public String getsummary()
-     {
+     public String getsummary(){
         return summary;
      }
-     public void setsummary(String summary)
-     {
+     public void setsummary(String summary){
         this.summary = summary;
      }
-     public String getType()
-     {
-        return Type;
+     public String gettype(){
+        return type;
      }
-     public void setType(String Type)
-     {
-        this.Type = Type;
+     public void settype(String type){
+        this.type = type;
      }
-     public String getStatus()
-     {
-        return Status;
+     public String getstatus(){
+        return status;
      }
-     public void setStatus(String Status)
-     {
-        this.Status = Status;
+     public void setstatus(String status) {
+        this.status = status;
      }
 }
