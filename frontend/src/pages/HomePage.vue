@@ -43,7 +43,7 @@ export default {
 data() {
   return {
     appointments: [
-{
+        {
             id: "68cdefc7-669c-48be-a148-6506dc2f3637",
             docId: "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
             startTime: "2023-04-21T15:30:00.552842800Z",

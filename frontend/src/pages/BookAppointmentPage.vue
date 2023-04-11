@@ -59,7 +59,7 @@
 
       <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
             <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" :disabled="!section3Complete" @click="proceedToSection5">
-              <AvailableDocTicket :key="index" v-for="(doctor, index) in availableDoctors" :doctor="doctor"></AvailableDocTicket>
+              <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor"></AvailableDocTicket>
             </b-form-radio-group>
       </AppointmentBookingSection>
 
@@ -93,6 +93,13 @@ export default {
       appointmentType: '',
 
       availableDoctors: [
+        {
+          "id": "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
+          "username": "lmao@surrey.ac.uk",
+          "firstName": "Alex",
+          "lastName": "Williams",
+          "role": "DOCTOR",
+        },
         {
           "id": "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
           "username": "lmao@surrey.ac.uk",
