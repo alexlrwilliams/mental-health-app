@@ -154,11 +154,11 @@ computed: {
       const now = new Date();
       return this.appointments.filter((appointment) => {
         const endTime = new Date(appointment.endTime);
-        return endTime < now || appointment.cancelled;
+        return endTime < now && !appointment.cancelled;
       });
     },
     cancelledAppointments() {
-    return this.appointments.filter(appointment => appointment.cancelled);
+    return this.appointments.filter((appointment) => appointment.cancelled);
     }
   }
 }
