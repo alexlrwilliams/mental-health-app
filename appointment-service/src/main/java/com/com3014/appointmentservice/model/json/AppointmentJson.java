@@ -2,22 +2,20 @@ package com.com3014.appointmentservice.model.json;
 
 
 import java.util.UUID;
-import java.sql.Time;
+
+import java.time.Instant;
 
 public class AppointmentJson 
 {
-
-    
-     private UUID id;
      private UUID docId;
-     private Time startTime;
-     private Time endTime;
+     private Instant startTime;
+     private Instant endTime;
      private UUID patientId;
      private String summary;
      private String type;
-     private String status;
+     private Boolean cancelled;
 
-     public AppointmentJson(UUID docId,Time startTime, Time endTime,UUID patientId,String summary,String type,String status) {  
+     public AppointmentJson(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled) {  
         
         this.docId= docId;
         this.startTime = startTime;
@@ -25,32 +23,26 @@ public class AppointmentJson
         this.patientId= patientId;
         this.summary = summary;
         this.type = type;
-        this.status = status;
+        this.cancelled = cancelled;
 
      }
-     public UUID getid(){
-        return id;
-     }
-     public void setid(UUID id){
-        this.id = id;
-
-     }
+    
      public UUID getdocId(){
         return docId;
      }
      public void setdocId(UUID docId){
         this.docId =docId;
      }
-     public Time getstartTime(){
+     public Instant getstartTime(){
         return startTime;
      }
-     public void setstartTime(Time startTime){
+     public void setstartTime(Instant startTime){
        this.startTime= startTime;
      }
-     public Time getendTime(){
+     public Instant getendTime(){
         return endTime;
      }
-     public void setendTime(Time endTime){
+     public void setendTime(Instant endTime){
         this.endTime = endTime;
      }
      public UUID getpatientId(){
@@ -71,10 +63,10 @@ public class AppointmentJson
      public void settype(String type){
         this.type = type;
      }
-     public String getstatus(){
-        return status;
+     public boolean getcancelled(){
+        return cancelled;
      }
-     public void setstatus(String status){
-        this.status = status;
+     public void setcancelled(Boolean cancelled){
+        this.cancelled = cancelled;
      }
 }

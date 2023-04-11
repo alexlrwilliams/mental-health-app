@@ -3,7 +3,7 @@ package com.com3014.appointmentservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
@@ -49,7 +49,7 @@ public class AppointmentController
         appointmentService.deleteAppointment(id);
     }
 
-    @GetMapping("/{patientId}")
+    @GetMapping("/patient/{patientId}")
     public List<Appointment> getAppointmentByPatientId( UUID patientId) {
         return appointmentService.getAppointmentByPatientId(patientId);
 
@@ -60,7 +60,7 @@ public class AppointmentController
     }
 
     @GetMapping()
-    public List<Appointment> getAllAppointments(@RequestParam(name = "startTime", required = false) Time startTime, @RequestParam(name = "endTime", required = false) Time endTime) {
+    public List<Appointment> getAllAppointments(@RequestParam(name = "startTime", required = false) Instant startTime, @RequestParam(name = "endTime", required = false) Instant endTime) {
     if (startTime == null || endTime == null) {
         return appointmentService.getAllAppointments();
     } else {

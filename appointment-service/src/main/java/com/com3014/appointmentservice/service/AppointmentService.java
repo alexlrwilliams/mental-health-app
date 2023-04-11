@@ -7,7 +7,7 @@ import com.com3014.appointmentservice.model.json.AppointmentJson;
 import com.com3014.appointmentservice.repository.AppointmentRepository;
 
 import com.com3014.appointmentservice.exceptions.AppointmentIdNotFoundException;
-import java.sql.Time;
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -26,14 +26,13 @@ public class AppointmentService {
 
     public Appointment createAppointment(AppointmentJson json){
         var appointment = new Appointment(
-            json.getid(),
             json.getdocId(),
             json.getstartTime(),
             json.getendTime(),
             json.getpatientId(),
             json.getsummary(),
             json.gettype(),
-            json.getstatus()
+            json.getcancelled()
         );
         return appointmentRepository.save(appointment);
     }
@@ -46,7 +45,7 @@ public class AppointmentService {
          appointment.setendTime(json.getendTime());
          appointment.setsummary(json.getsummary());
          appointment.settype(json.gettype());
-         appointment.setstatus(json.getstatus());
+         appointment.setcancelled(json.getcancelled());
 
         return appointmentRepository.save(appointment);
     }
@@ -75,7 +74,7 @@ public class AppointmentService {
     return appointmentRepository.findAll();
    }
    
-    public List<Appointment> getAppointmentsBetween(Time startTime,Time endTime) {
+    public List<Appointment> getAppointmentsBetween(Instant startTime,Instant endTime) {
        return appointmentRepository.findByStartTimeAfterAndEndTimeBefore(startTime,endTime);
     } 
 }

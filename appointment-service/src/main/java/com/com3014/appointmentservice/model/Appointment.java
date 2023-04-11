@@ -3,7 +3,7 @@ package com.com3014.appointmentservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.*;
-import java.sql.Time;
+import java.time.Instant;
 
 
 
@@ -12,24 +12,24 @@ public class Appointment {
     @Id
     private UUID id;
     private UUID docId;
-    private Time startTime;
-    private Time endTime;
+    private Instant startTime;
+    private Instant endTime;
     private UUID patientId;
     private String summary;
     private String type;
-    private String status;
+    private Boolean cancelled;
 
-    public Appointment(UUID id,UUID docId,Time startTime, Time endTime,UUID patientId,String summary,String type,String status)
+    public Appointment(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled)
     {  
        
-       this.id=UUID.randomUUID();
+       
        this.docId=docId;
        this.startTime = startTime;
        this.endTime = endTime;
        this.patientId= patientId;
        this.summary = summary;
        this.type = type;
-       this.status = status;
+       this.cancelled = cancelled;
 
     }
     public UUID getid(){
@@ -45,16 +45,16 @@ public class Appointment {
      public void setdocId(UUID docId){
         this.docId =docId;
      }
-     public Time getstartTime(){
+     public Instant getstartTime(){
         return startTime;
      }
-     public void setstartTime(Time startTime){
+     public void setstartTime(Instant startTime){
         this.startTime= startTime;
      }
-     public Time getendTime(){
+     public Instant getendTime(){
         return endTime;
      }
-     public void setendTime(Time endTime)
+     public void setendTime(Instant endTime)
      {
         this.endTime = endTime;
      }
@@ -76,10 +76,10 @@ public class Appointment {
      public void settype(String type){
         this.type = type;
      }
-     public String getstatus(){
-        return status;
+     public Boolean getcancelled(){
+        return cancelled;
      }
-     public void setstatus(String status) {
-        this.status = status;
+     public void setcancelled(Boolean cancelled) {
+        this.cancelled = cancelled;
      }
 }
