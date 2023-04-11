@@ -1,5 +1,6 @@
 package com.com3014.apigateway;
 
+import com.com3014.apigateway.model.Role;
 import com.com3014.apigateway.model.TokenValidationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -49,7 +51,8 @@ public class SpringGatewayChatServiceRoutingTest {
     @Test
     public void chat_route__successful() {
         when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
-        )).thenReturn(Mono.just(true));
+        )).thenReturn(true);
+        when(authenticationService.getUserRole(anyString())).thenReturn(Role.PATIENT);
         webClient
                 .get()
                 .uri("/api/chat")
@@ -63,7 +66,7 @@ public class SpringGatewayChatServiceRoutingTest {
     @Test
     public void other_route__unsuccessful() {
         when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
-        )).thenReturn(Mono.just(true));
+        )).thenReturn(true);
         webClient
                 .get()
                 .uri("/api/appointments/test")
