@@ -6,12 +6,15 @@
         <p>Welcome to <b>EvenBetterHealth</b>. Please register your account, if you are a new user.</p>
       </b-card-header>
       <b-card-body>
+        <b-alert v-model="conflictAlert" variant="danger" dismissible>
+          Email already exists.
+        </b-alert>
         <b-form @submit.prevent="register" >
           <b-form-group id="fname-group"
                         label="First name:*"
                         label-for="fname-input">
-            <b-form-input id="name-input"
-                          v-model="fname"
+            <b-form-input id="first-name-input"
+                          v-model="form.firstName"
                           type="text"
                           required></b-form-input>
           </b-form-group>
@@ -19,8 +22,8 @@
           <b-form-group id="lname-group"
                         label="Last name:*"
                         label-for="lname-input">
-            <b-form-input id="name-input"
-                          v-model="lname"
+            <b-form-input id="last-name-input"
+                          v-model="form.lastName"
                           type="text"
                           required></b-form-input>
           </b-form-group>
@@ -29,13 +32,13 @@
                         label="Home address:*"
                         label-for="address-input">
             <b-form-textarea id="address-input"
-                          v-model="address"
+                          v-model="form.address"
                           type="text"
                           required></b-form-textarea>
           </b-form-group>
 
           <b-form-group id="profession-group" label="Current profession:*">
-            <b-form-radio-group v-model='profession' 
+            <b-form-radio-group v-model='form.role'
                                 :options='options' 
                                 value-field='item' 
                                 text-field='name' 
@@ -46,7 +49,7 @@
                         label="Email address:*"
                         label-for="email-input">
             <b-form-input id="email-input"
-                          v-model="email"
+                          v-model="form.email"
                           type="email"
                           required></b-form-input>
           </b-form-group>
@@ -55,7 +58,7 @@
                         label-for="password-input">
             <b-form-input id="password-input"
                           type="password"
-                          v-model="password"
+                          v-model="form.password"
                           required></b-form-input>
           </b-form-group><br>
 
@@ -73,23 +76,32 @@
 export default {
   data() {
     return {
-      fname: '',
-      lname: '',
-      address: '',
-      profession:'', 
+      conflictAlert: false,
+      form: {
+        email: '',
+        password: '',
+        role: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+      },
       options: [
         {item: 'PATIENT', name: 'Patient'},
         {item: 'DOCTOR', name: 'Doctor'},
         {item: 'ADMINISTRATOR', name: 'Administrator'}
       ],
-      email: '',
-      password: ''
     }
   },
   name: 'RegisterPage',
   methods: {
-    register() {
-      
+    async register() {
+      await this.$store.dispatch('register', this.form)
+          .catch(exception => {
+            console.log(exception.status, exception.statusText);
+            if (exception.status === 409) {
+              this.conflictAlert = true;
+            }
+          });
     }
   }
 }

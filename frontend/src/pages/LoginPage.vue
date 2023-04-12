@@ -6,6 +6,9 @@
         <p>Welcome to <b>EvenBetterHealth</b>. Please Login to your account or create an account if you don't have one.</p>
       </b-card-header>
       <b-card-body>
+        <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+          Email or Password incorrect.
+        </b-alert>
         <b-form @submit.prevent="login" >
           <b-form-group id="email-group"
                         label="Email address:"
@@ -42,13 +45,18 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      showDismissibleAlert: false,
     }
   },
   name: 'LoginPage',
   methods: {
-    login() {
-      
+    async login() {
+      await this.$store.dispatch('login', this.$data)
+          .catch(exception => {
+            console.log(exception.status, exception.statusText);
+            this.showDismissibleAlert = true;
+          });
     }
   }
 }
