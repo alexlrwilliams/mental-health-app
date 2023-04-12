@@ -153,8 +153,7 @@ computed: {
   .book-appointment-btn {
     width: 80%;
   }
-  .tabs {
+  .tab-title {
     font-size: 1.3rem;
-
   }
 </style>

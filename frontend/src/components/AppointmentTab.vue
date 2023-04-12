@@ -1,5 +1,5 @@
 <template>
-  <b-tab :title="title" :active="active">
+  <b-tab title-item-class="tab-title" :title="title" :active="active">
     <b-card class="appointment-box">
       <b-card-header>
         <h4 :class="headerClass"> {{ title }} Appointments <span :class="dotClass"></span> </h4>
