@@ -1,18 +1,15 @@
 package com.com3014.appointmentservice.controller;
 
+import com.com3014.appointmentservice.model.Appointment;
+import com.com3014.appointmentservice.model.json.AppointmentJson;
+import com.com3014.appointmentservice.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
-
-
-import com.com3014.appointmentservice.model.Appointment;
-import com.com3014.appointmentservice.model.json.AppointmentJson;
-
-import com.com3014.appointmentservice.service.AppointmentService;
+import java.util.UUID;
 
 
 
@@ -50,7 +47,7 @@ public class AppointmentController
     }
 
     @GetMapping("/patient/{patientId}")
-    public List<Appointment> getAppointmentByPatientId( UUID patientId) {
+    public List<Appointment> getAppointmentByPatientId(@PathVariable UUID patientId) {
         return appointmentService.getAppointmentByPatientId(patientId);
 
     }

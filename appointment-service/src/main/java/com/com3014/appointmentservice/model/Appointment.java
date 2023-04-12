@@ -2,8 +2,9 @@ package com.com3014.appointmentservice.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.*;
+
 import java.time.Instant;
+import java.util.UUID;
 
 
 
@@ -19,18 +20,15 @@ public class Appointment {
     private String type;
     private Boolean cancelled;
 
-    public Appointment(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled)
-    {  
-       
-       
-       this.docId=docId;
-       this.startTime = startTime;
-       this.endTime = endTime;
-       this.patientId= patientId;
-       this.summary = summary;
-       this.type = type;
-       this.cancelled = cancelled;
-
+    public Appointment(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled) {
+        this.id = UUID.randomUUID();
+        this.docId=docId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.patientId= patientId;
+        this.summary = summary;
+        this.type = type;
+        this.cancelled = cancelled;
     }
     public UUID getid(){
         return id;
