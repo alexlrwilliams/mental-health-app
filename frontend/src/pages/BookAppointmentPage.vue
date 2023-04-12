@@ -58,9 +58,9 @@
       </AppointmentBookingSection>
 
       <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
-            <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" :disabled="!section3Complete" @click="proceedToSection5">
-              <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor"></AvailableDocTicket>
-            </b-form-radio-group>
+        <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" v-model="selectedDoctor" :disabled="!section3Complete" @click="proceedToSection5">
+          <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor"/>
+        </b-form-radio-group>
       </AppointmentBookingSection>
 
       <div class="booking-section-btn" ref="section5">
@@ -76,8 +76,8 @@ import AvailableDocTicket from "@/components/AvailableDocTicket.vue";
 
 export default {
   components: {
-    AppointmentBookingSection, 
-    AvailableDocTicket
+    AvailableDocTicket,
+    AppointmentBookingSection
   },
   data() {
     return {
@@ -92,19 +92,29 @@ export default {
 
       appointmentType: '',
 
+      selectedDoctor: '',
+
       availableDoctors: [
         {
           "id": "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
           "username": "lmao@surrey.ac.uk",
+          "hospital": "Lister Hospital",
           "firstName": "Alex",
           "lastName": "Williams",
           "role": "DOCTOR",
         },
         {
-          "id": "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
+          "id": "0e4c9e0e-64a1-48c1-a8b3-84fe12204055",
           "username": "lmao@surrey.ac.uk",
-          "firstName": "Alex",
-          "lastName": "Williams",
+          "firstName": "Ahmed",
+          "lastName": "Henine",
+          "role": "DOCTOR",
+        },
+        {
+          "id": "0f3c8e0e-64a1-48c1-a8b3-84fe12204055",
+          "username": "lmao@surrey.ac.uk",
+          "firstName": "Jennifer",
+          "lastName": "Maria",
           "role": "DOCTOR",
         }
       ]

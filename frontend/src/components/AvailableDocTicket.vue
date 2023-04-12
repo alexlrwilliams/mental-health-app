@@ -1,9 +1,7 @@
 <template>
-  <b-form-radio class="appointment-type-radios__radio-item"  :value="doctor.docId">
-    <div class="row">
-      <h4>Dr. {{ doctor.doctor }}</h4>
-      <p>{{ doctor.hospital }}</p>
-    </div>
+  <b-form-radio class="doctor-radios__radio-item"  :value="doctor.id">
+      <h4>Dr. {{ doctor.firstName + " " + doctor.lastName }}</h4>
+      <p>{{ doctor.hospital || "Hospital not specified" }}</p>
   </b-form-radio>
 </template>
 
@@ -11,7 +9,7 @@
 export default {
   props: {
     // Define props for appointment data
-    available: {
+    doctor: {
       type: Object,
       required: true
     }
@@ -20,11 +18,13 @@ export default {
 </script>
 
 <style >
-.appointment-type-radios__radio-item {
-  flex: 0 0 50%;
+.doctor-radios__radio-item {
+  flex: 0 0 50% !important;
   border-radius: 0;
   margin-left: 0 !important;
   padding: 5px;
+  justify-content: center;
+  flex-flow: column;
 }
 
 </style>
