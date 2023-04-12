@@ -3,7 +3,7 @@
     <div class='col-md-8 mx-auto center'>
       <b-button class="book-appointment-btn" variant='success' to='/book-appointment' ><h4>Book an appointment</h4></b-button>
       <b-tabs content-class="mt-3">
-        <AppointmentTab title="Upcoming" :appointments="upcomingAppointments" dot-class="upcoming-dot" :active="true"/>
+        <AppointmentTab class="appointment-tab-title" title="Upcoming" :appointments="upcomingAppointments" dot-class="upcoming-dot" :active="true"/>
         <AppointmentTab title="Previous" :appointments="previousAppointments" dot-class="previous-dot"/>
         <AppointmentTab title="Cancelled" :appointments="cancelledAppointments" header-class="cancelled-title"/>
       </b-tabs>
@@ -152,5 +152,9 @@ computed: {
   }
   .book-appointment-btn {
     width: 80%;
+  }
+  .tabs {
+    font-size: 1.3rem;
+
   }
 </style>
