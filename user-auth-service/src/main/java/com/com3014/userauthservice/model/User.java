@@ -1,5 +1,6 @@
 package com.com3014.userauthservice.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,14 +14,24 @@ import java.util.UUID;
 @Document("user")
 public class User implements UserDetails {
     @Id
+    @JsonView(Views.Public.class)
     private UUID id;
 
+    @JsonView(Views.Public.class)
     private String username;
+
     private String password;
 
+    @JsonView(Views.Public.class)
     private Role role;
+
+    @JsonView(Views.Public.class)
     private String firstName;
+
+    @JsonView(Views.Public.class)
     private String lastName;
+
+    @JsonView(Views.Public.class)
     private String address;
 
     public User() {
@@ -36,6 +47,10 @@ public class User implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override
@@ -78,6 +93,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonView(Views.Public.class)
     public UUID getId() {
         return id;
     }
@@ -117,5 +133,10 @@ public class User implements UserDetails {
     public User setAddress(String address) {
         this.address = address;
         return this;
+    }
+
+    public class Views {
+        public static class Public {
+        }
     }
 }
