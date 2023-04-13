@@ -5,7 +5,7 @@
         <b-navbar-brand to="/">EvenBetterHealth</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav class="ms-auto">
+          <b-navbar-nav class="ml-auto">
             <b-nav-item to="/"><b-icon-house-door-fill/>Home</b-nav-item>
             <b-nav-item to="about-us"><b-icon-info-circle-fill/> About us</b-nav-item>
             <b-nav-item to="contact-us"><b-icon-telephone-fill/> Contact us</b-nav-item>
