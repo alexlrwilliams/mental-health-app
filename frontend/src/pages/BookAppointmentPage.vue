@@ -20,7 +20,7 @@
           </b-form-group>
 
           <div class="booking-section-btn">
-            <b-button variant="primary" class='booking-section-btn-proceed' v-model="type" @click="proceedToSection2">Proceed to calendar</b-button>
+            <b-button variant="primary" class='booking-section-btn-proceed' v-model="type" :disabled="description===''"  @click="proceedToSection2">Proceed to calendar</b-button>
           </div>
         </b-form>
       </AppointmentBookingSection>
@@ -34,7 +34,7 @@
         </b-form>
 
         <div class="booking-section-btn">
-          <b-button variant="primary" class='booking-section-btn-proceed' :disabled="!section1Complete" @click="proceedToSection3">Proceed to meeting types</b-button>
+          <b-button variant="primary" class='booking-section-btn-proceed' :disabled="selectedDate===''||selectedTime===''" @click="proceedToSection3">Proceed to meeting types</b-button>
         </div>
       </AppointmentBookingSection>
 
@@ -53,7 +53,7 @@
         </b-form>
 
         <div class="booking-section-btn">
-          <b-button variant="primary" class='booking-section-btn-proceed' :disabled="!section2Complete" @click="proceedToSection4">Proceed to doctors list</b-button>
+          <b-button variant="primary" class='booking-section-btn-proceed' :disabled="appointmentType===''" @click="proceedToSection4">Proceed to doctors list</b-button>
         </div>
       </AppointmentBookingSection>
 
