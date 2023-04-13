@@ -1,5 +1,6 @@
 package com.com3014.apigateway;
 
+import com.com3014.apigateway.model.Role;
 import com.com3014.apigateway.model.TokenValidationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -36,7 +38,7 @@ public class SpringGatewayAppointmentServiceRoutingTest {
     @BeforeEach
     public void setup() {
         when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
-        )).thenReturn(Mono.just(true));
+        )).thenReturn(true);
         this.webClient = WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofSeconds(10))
@@ -50,6 +52,7 @@ public class SpringGatewayAppointmentServiceRoutingTest {
 
     @Test
     public void appointment_route__successful() {
+        when(authenticationService.getUserRole(anyString())).thenReturn(Role.DOCTOR);
         webClient
                 .get()
                 .uri("/api/appointments")

@@ -49,7 +49,7 @@ public class SpringGatewayFilterTest {
     @Test
     public void users_route__token_invalid() {
         when(authenticationService.validateToken(ArgumentMatchers.any(TokenValidationRequest.class)
-        )).thenReturn(Mono.just(false));
+        )).thenReturn(false);
         webClient
                 .get()
                 .uri("/api/users")
