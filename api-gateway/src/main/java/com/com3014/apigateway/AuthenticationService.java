@@ -35,6 +35,6 @@ public class AuthenticationService {
     public Role getUserRole(String email) {
         String url = "%s/api/users/email/%s".formatted(AUTH_SERVICE_BASE_URI, email);
         JsonUser user = Objects.requireNonNull(restTemplate.getForObject(url, JsonUser.class));
-        return user.getAuthorities().get(0).authority();
+        return user.getRole();
     }
 }
