@@ -58,13 +58,13 @@
       </AppointmentBookingSection>
 
       <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
-        <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" v-model="selectedDoctor" :disabled="!section3Complete" @click="proceedToSection5">
-          <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor"/>
+        <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" v-model="selectedDoctor" :disabled="!section3Complete">
+          <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor" @click.native="enableBookAppointmentButton"/>
         </b-form-radio-group>
       </AppointmentBookingSection>
 
-      <div class="booking-section-btn" ref="section5">
-          <b-button type="submit" variant="success" class='booking-section-btn-proceed' :disabled="!section4Complete">Book appointment</b-button><br>
+      <div class="booking-section-btn">
+          <b-button type="submit" variant="success" class='booking-section-btn-proceed' :disabled="!isBookAppointmentButtonEnabled">Book appointment</b-button><br>
       </div>
     </div>
   </div>
@@ -117,7 +117,8 @@ export default {
           "lastName": "Maria",
           "role": "DOCTOR",
         }
-      ]
+      ], 
+      isBookAppointmentButtonEnabled: false
 
     }
   },
@@ -139,10 +140,9 @@ export default {
       // Your code to validate section 3 goes here
       this.proceedToSection("section3Complete", this.$refs.section4);
     },
-    proceedToSection5() {
-      // Your code to validate section 3 goes here
-      this.proceedToSection("section4Complete", this.$refs.section5);
-    },
+    enableBookAppointmentButton() {
+      this.isBookAppointmentButtonEnabled = true
+  },
     book() {
 
     }
