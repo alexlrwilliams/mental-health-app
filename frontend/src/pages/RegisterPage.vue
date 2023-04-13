@@ -1,9 +1,9 @@
 <template>
   <div class="register-container">
-    <b-card class="register-form">
+    <b-card no-body class="register-form mb-2">
       <b-card-header>
         <h4><b>Register your account:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b>. Please register your account, if you are a new user.</p>
+        <p>Welcome to <b>EvenBetterHealth</b>. Register a new account by filling in your details below.</p>
       </b-card-header>
       <b-card-body>
         <b-alert v-model="conflictAlert" variant="danger" dismissible>
@@ -62,12 +62,12 @@
                           required></b-form-input>
           </b-form-group><br>
 
-          <div class="register-form__buttons">
-            <b-button type='submit' variant="success" class='register-form__register'>Create an account</b-button>
-            <b-button to='/login' variant="primary" class='register-form__login'>Back to Login page</b-button>
-          </div>
+          <b-button type='submit' variant="success" class='register-form__register'>Register</b-button>
         </b-form>
       </b-card-body>
+      <template #footer>
+        Already a member? <b-link to='/login'>Login.</b-link>
+      </template>
     </b-card>
   </div>
 </template>
@@ -111,20 +111,10 @@ export default {
   .card-header h4 {
     margin-bottom: 0;
   }
-  .register-form__buttons{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
     .register-form__register {
     width: 100%;
     border-radius: 13px;
     margin-bottom: 2px
-  }
-    .register-form__login {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 2px
   }
   .register-container {
     display: flex;
@@ -137,6 +127,6 @@ export default {
   }
   .register-form {
     width: 40%;
-    margin: 0 auto;
+    font-size: smaller;
   }
 </style>
