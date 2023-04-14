@@ -10,7 +10,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,21 +30,21 @@ public class JwtService {
 
     public static final String TOKEN_ID_KEY = "jti";
 
-    @Value("${access.token.expiration}")
-    private int accessTokenExpiration;
 
-    @Value("${refresh.token.expiration}")
-    private int refreshTokenExpiration;
+    private final int accessTokenExpiration;
 
-    private HttpServletRequest request;
+
+    private final int refreshTokenExpiration;
 
     private final RedisTokenRepository redisTokenRepository;
 
     @Autowired
     public JwtService(@Value("${jwt.secret}") String secret,
-                      HttpServletRequest request,
+                      @Value("${access.token.expiration}") int accessTokenExpiration,
+                      @Value("${refresh.token.expiration}") int refreshTokenExpiration,
                       RedisTokenRepository redisTokenRepository) {
-        this.request = request;
+        this.accessTokenExpiration = accessTokenExpiration;
+        this.refreshTokenExpiration = refreshTokenExpiration;
         this.secretKey = Keys.hmacShaKeyFor(
                 Decoders.BASE64.decode(secret)
         );
@@ -63,14 +62,6 @@ public class JwtService {
     public <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
         Claims claims = extractClaims(jwtToken);
         return claimsResolver.apply(claims);
-    }
-
-    private Claims extractClaims(String jwtToken) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(jwtToken)
-                .getBody();
     }
 
     public boolean validateAccessToken(String token, UserDetails userDetails) {
@@ -108,6 +99,14 @@ public class JwtService {
         throw new InvalidTokenException(
                 "Refresh token invalid for user %s".formatted(userDetails.getUsername())
         );
+    }
+
+    private Claims extractClaims(String jwtToken) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(jwtToken)
+                .getBody();
     }
 
     private boolean validateToken(String token, UserDetails userDetails, TokenType expectedToken) {

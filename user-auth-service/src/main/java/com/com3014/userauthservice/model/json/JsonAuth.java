@@ -1,7 +1,13 @@
 package com.com3014.userauthservice.model.json;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class JsonAuth {
+    @Email
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
 
     public JsonAuth(String email, String password) {

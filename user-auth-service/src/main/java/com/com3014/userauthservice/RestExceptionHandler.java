@@ -2,6 +2,7 @@ package com.com3014.userauthservice;
 
 import com.com3014.userauthservice.exceptions.InvalidTokenException;
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
+import com.com3014.userauthservice.exceptions.UserNotValidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +26,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
-    @ExceptionHandler({InvalidTokenException.class})
+    @ExceptionHandler({InvalidTokenException.class, UserNotValidException.class})
     protected ResponseEntity<ApiError> handleBadRequestError(Exception ex) {
         ApiError apiError = new ApiError(BAD_REQUEST, ex);
         return buildResponseEntity(apiError);
