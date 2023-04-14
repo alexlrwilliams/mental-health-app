@@ -8,6 +8,8 @@ import Register from './pages/RegisterPage.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import BookAppointmentPage from "@/pages/BookAppointmentPage.vue";
 
 Vue.use(VueRouter)
 // Make BootstrapVue available throughout your project
@@ -18,7 +20,8 @@ Vue.use(IconsPlugin)
 const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
-  { path: '/register', component: Register }
+  { path: '/register', component: Register },
+  { path: '/book-appointment', component: BookAppointmentPage }
 ]
 
 const router = new VueRouter({
