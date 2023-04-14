@@ -25,7 +25,7 @@
         <b-form-input type="email" v-model="emailAddress" :disabled="isDisabled"></b-form-input>
       </b-form-group>
       <div class="btns">
-        <b-button variant="primary" class="edit" v-if="isDisabled" @click="enableInput">Edit profile</b-button>
+        <b-button variant="primary" class="edit" v-if="isDisabled" @click="EditProfile">Edit profile</b-button>
         <b-button variant="success" class="save" v-else @click="saveChanges">Save</b-button>
       </div>
   </b-card>
@@ -60,7 +60,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    enableInput() {
+    EditProfile() {
       this.isDisabled = false;
     },
     saveChanges() {
