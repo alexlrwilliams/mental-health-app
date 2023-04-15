@@ -1,6 +1,8 @@
 package com.com3014.userauthservice.controller;
 
 import com.com3014.userauthservice.UnitTestHelper;
+import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
+import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.service.UserService;
@@ -45,9 +47,16 @@ class UserControllerTest {
     private final List<User> allUsers = List.of(user1, user2);
 
     @Test
-    void getAllUsers() {
+    void getAllUsers__user_role_access() {
         when(userService.getAllUsers()).thenReturn(allUsers);
-        assertThat(userController.getAllUsers()).isEqualTo(allUsers);
+        assertThat(userController.getAllUsers(Role.DOCTOR, user1.getUsername())).isEqualTo(allUsers);
+        assertThat(userController.getAllUsers(Role.ADMIN, user1.getUsername())).isEqualTo(allUsers);
+    }
+
+    @Test
+    void getAllUsers__user_unauthorizaed() {
+        assertThatThrownBy(() -> userController.getAllUsers(Role.PATIENT, user1.getUsername()))
+                .isInstanceOf(UnauthorisedAccessException.class);
     }
 
     @Test
@@ -80,9 +89,22 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserByEmail() {
+    void getUserByEmail__user_role_access() {
         when(userService.getUserByEmailOrThrow(user1.getUsername())).thenReturn(user1);
-        assertThat(userController.getUserByEmail(user1.getUsername())).isEqualTo(user1);
+        assertThat(userController.getUserByEmail(user1.getUsername(), Role.DOCTOR, user2.getUsername())).isEqualTo(user1);
+        assertThat(userController.getUserByEmail(user1.getUsername(), Role.ADMIN, user2.getUsername())).isEqualTo(user1);
+    }
+
+    @Test
+    void getUserByEmail__is_user_access() {
+        when(userService.getUserByEmailOrThrow(user1.getUsername())).thenReturn(user1);
+        assertThat(userController.getUserByEmail(user1.getUsername(), Role.PATIENT, user1.getUsername())).isEqualTo(user1);
+    }
+
+    @Test
+    void getUserByEmail__user_not_authorised() {
+        assertThatThrownBy(() -> userController.getUserByEmail(user1.getUsername(), Role.PATIENT, user2.getUsername()))
+                .isInstanceOf(UnauthorisedAccessException.class);
     }
 
     @Test
@@ -93,14 +115,14 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
-        when(userService.updateUser(user1.getId(), jsonUser)).thenReturn(user1);
-        assertThat(userController.updateUser(user1.getId(), jsonUser, bindingResult)).isEqualTo(user1);
+        when(userService.updateUser(user1.getId(), jsonUser, "email")).thenReturn(user1);
+        assertThat(userController.updateUser(user1.getId(), jsonUser, bindingResult, "email")).isEqualTo(user1);
     }
 
     @Test
     void updateUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUser, bindingResult));
-        verify(userService, never()).updateUser(any(),any());
+        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUser, bindingResult, "email"));
+        verify(userService, never()).updateUser(any(),any(), any());
     }
 }

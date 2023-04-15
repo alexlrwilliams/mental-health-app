@@ -1,6 +1,7 @@
 package com.com3014.userauthservice.controller;
 
 import com.com3014.userauthservice.UnitTestHelper;
+import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.service.UserService;
 import org.hamcrest.CoreMatchers;
@@ -41,8 +42,22 @@ class UserControllerSmokeTest {
 
     @Test
     public void getUser__valid() throws Exception {
-        mockMvc.perform(get("/api/users"))
+        mockMvc.perform(
+                get("/api/users")
+                        .header("X-Role-Header", Role.DOCTOR)
+                        .header("email", UnitTestHelper.EMAIL)
+                )
                 .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void getUser__invalid() throws Exception {
+        mockMvc.perform(
+                        get("/api/users")
+                                .header("X-Role-Header", Role.PATIENT)
+                                .header("email", UnitTestHelper.EMAIL)
+                )
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -100,7 +115,8 @@ class UserControllerSmokeTest {
     @Test
     public void updateUser__valid() throws Exception {
         var id = UUID.randomUUID();
-        when(userService.updateUser(eq(id), any(JsonUser.class))).thenReturn(UnitTestHelper.testUser1);
+        var email = "alex@gmail.com";
+        when(userService.updateUser(eq(id), any(JsonUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
         mockMvc.perform(
                 put("/api/users/%s".formatted(id))
                         .with(csrf())
@@ -115,6 +131,7 @@ class UserControllerSmokeTest {
                                 	"address": "test"
                                 }
                           """)
+                        .header("email", email)
                 )
                 .andExpect(status().is2xxSuccessful());
     }
@@ -122,7 +139,8 @@ class UserControllerSmokeTest {
     @Test
     public void updateUser__not_valid() throws Exception {
         var id = UUID.randomUUID();
-        when(userService.updateUser(eq(id), any(JsonUser.class))).thenReturn(UnitTestHelper.testUser1);
+        var email = "email@email.com";
+        when(userService.updateUser(eq(id), any(JsonUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
         var expectedMessage = List.of("lastName must not be blank",
                 "role must not be null",
                 "address must not be blank",
@@ -142,6 +160,7 @@ class UserControllerSmokeTest {
                                 	"address": ""
                                 }
                                 """)
+                                .header("email", email)
                 )
                 .andDo(print())
                 .andExpect(status().is4xxClientError())

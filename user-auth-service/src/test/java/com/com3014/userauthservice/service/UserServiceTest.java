@@ -1,6 +1,8 @@
 package com.com3014.userauthservice.service;
 
 import com.com3014.userauthservice.UnitTestHelper;
+import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
+import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
@@ -11,6 +13,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -70,7 +73,8 @@ class UserServiceTest {
     @Test
     void getUserOrThrow__user_does_not_exist() {
         when(userRepository.findUserByUsername(EMAIL)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> userService.getUserByEmailOrThrow(EMAIL));
+        assertThatThrownBy(() -> userService.getUserByEmailOrThrow(EMAIL))
+                .isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
@@ -94,7 +98,8 @@ class UserServiceTest {
     @Test
     void getUserByIdOrThrow__user_does_not_exist() {
         when(userRepository.findById(user1.getId())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> userService.getUserByIdOrThrow(user1.getId()));
+        assertThatThrownBy(() -> userService.getUserByIdOrThrow(user1.getId()))
+                .isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
@@ -114,7 +119,8 @@ class UserServiceTest {
     void createUser__user_exists() {
         when(userRepository.findUserByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.createUser(jsonUser));
+        assertThatThrownBy(() -> userService.createUser(jsonUser))
+                .isInstanceOf(UserAlreadyExistAuthenticationException.class);
     }
 
     @Test
@@ -136,7 +142,7 @@ class UserServiceTest {
         when(userRepository.findUserByUsername(EMAIL))
                 .thenReturn(Optional.of(user1));
 
-        userService.updateUser(user1.getId(), jsonUser);
+        userService.updateUser(user1.getId(), jsonUser, user1.getUsername());
 
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
@@ -146,11 +152,24 @@ class UserServiceTest {
 
     @Test
     void updateUser__conflicting_user_exists() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         when(userRepository.findUserByUsername(EMAIL))
                 .thenReturn(Optional.of(user2));
 
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser));
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser, user1.getUsername()))
+                .isInstanceOf(UserAlreadyExistAuthenticationException.class);
+    }
+
+    @Test
+    void updateUser__user_unauthorized() {
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
+        when(userRepository.findUserByUsername(EMAIL))
+                .thenReturn(Optional.of(user1));
+
+        verify(userRepository, never()).save(any());
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser, "email"))
+                .isInstanceOf(UnauthorisedAccessException.class);
     }
 
 
