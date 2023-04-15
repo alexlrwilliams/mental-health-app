@@ -34,11 +34,9 @@ public class UserController {
     @GetMapping()
     public List<User> getAllUsers(@RequestHeader("X-Role-Header") Role userRole,
                                   @RequestHeader("email") String email) {
-        if (validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), null, null)) {
-            return userService.getAllUsers();
-        }
-        throw new UnauthorisedAccessException("User %s cannot access all user information"
-                .formatted(email));
+        validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), null, null,
+                "User %s cannot access all user information".formatted(email));
+        return userService.getAllUsers();
     }
 
     @PostMapping
@@ -70,11 +68,9 @@ public class UserController {
     public User getUserByEmail(@PathVariable String email,
                                @RequestHeader("X-Role-Header") Role userRole,
                                @RequestHeader("email") String userEmail) {
-        if (validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), email, userEmail)) {
-            return userService.getUserByEmailOrThrow(email);
-        }
-        throw new UnauthorisedAccessException("User %s cannot access user %s information"
-                .formatted(userEmail, email));
+        validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), email, userEmail,
+                "User %s cannot access user %s information".formatted(userEmail, email));
+        return userService.getUserByEmailOrThrow(email);
     }
 
     @DeleteMapping("/{id}")
@@ -94,9 +90,11 @@ public class UserController {
         return userService.updateUser(id, jsonUser, email);
     }
 
-    private boolean validateUserAccess(Role userRole, List<Role> validRoles, String email, String userEmail) {
+    private void validateUserAccess(Role userRole, List<Role> validRoles, String email, String userEmail, String message) {
         var isUser = email != null && userEmail != null && Objects.equals(email, userEmail);
         var hasRoleAccess = validRoles.contains(userRole);
-        return isUser || hasRoleAccess;
+        if (!isUser && !hasRoleAccess) {
+            throw new UnauthorisedAccessException(message);
+        }
     }
 }
