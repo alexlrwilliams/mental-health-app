@@ -1,7 +1,9 @@
 package com.com3014.userauthservice.controller;
 
 import com.com3014.userauthservice.ValidationUtils;
+import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.exceptions.UserNotValidException;
+import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonUser;
 import com.com3014.userauthservice.service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -29,8 +32,13 @@ public class UserController {
 
     @JsonView(User.Views.Public.class)
     @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers(@RequestHeader("X-Role-Header") Role userRole,
+                                  @RequestHeader("email") String email) {
+        if (validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), null, null)) {
+            return userService.getAllUsers();
+        }
+        throw new UnauthorisedAccessException("User %s cannot access all user information"
+                .formatted(email));
     }
 
     @PostMapping
@@ -59,8 +67,14 @@ public class UserController {
 
     @JsonView(User.Views.Public.class)
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmailOrThrow(email);
+    public User getUserByEmail(@PathVariable String email,
+                               @RequestHeader("X-Role-Header") Role userRole,
+                               @RequestHeader("email") String userEmail) {
+        if (validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), email, userEmail)) {
+            return userService.getUserByEmailOrThrow(email);
+        }
+        throw new UnauthorisedAccessException("User %s cannot access user %s information"
+                .formatted(userEmail, email));
     }
 
     @DeleteMapping("/{id}")
@@ -71,11 +85,18 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable UUID id,
                            @Valid @RequestBody JsonUser jsonUser,
-                           BindingResult bindingResult) {
+                           BindingResult bindingResult,
+                           @RequestHeader("email") String email) {
         if (bindingResult.hasErrors()) {
             var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
             throw new UserNotValidException(errors);
         }
-        return userService.updateUser(id, jsonUser);
+        return userService.updateUser(id, jsonUser, email);
+    }
+
+    private boolean validateUserAccess(Role userRole, List<Role> validRoles, String email, String userEmail) {
+        var isUser = email != null && userEmail != null && Objects.equals(email, userEmail);
+        var hasRoleAccess = validRoles.contains(userRole);
+        return isUser || hasRoleAccess;
     }
 }

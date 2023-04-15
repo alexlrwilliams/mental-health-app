@@ -1,5 +1,6 @@
 package com.com3014.userauthservice.service;
 
+import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonAuth;
@@ -67,20 +68,23 @@ public class UserService implements UserDetailsService {
         userRepository.delete(getUserByIdOrThrow(id));
     }
 
-    public User updateUser(UUID id, JsonUser jsonUser) {
+    public User updateUser(UUID id, JsonUser jsonUser, String email) {
         List<Predicate<User>> filters = List.of(
                 (User user) -> !user.getId().equals(id)
         );
 
-        validateUser(jsonUser, filters);
-        var user = getUserByIdOrThrow(id)
+        var user = getUserByIdOrThrow(id);
+
+        validateUser(jsonUser, user, email, filters);
+
+        var updatedUser = user
                 .setFirstName(jsonUser.getFirstName())
                 .setLastName(jsonUser.getLastName())
                 .setUsername(jsonUser.getEmail())
                 .setPassword(encryptPassword(jsonUser.getPassword()))
                 .setAddress(jsonUser.getAddress())
                 .setRole(jsonUser.getRole());
-        return userRepository.save(user);
+        return userRepository.save(updatedUser);
     }
 
 
@@ -113,21 +117,25 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.encode(password);
     }
 
-    private void validateUser(JsonUser user) {
-        validateUser(user, List.of());
+    private void validateUser(JsonUser jsonUser) {
+        validateUser(jsonUser, null, null, List.of());
     }
 
-    private void validateUser(JsonUser user, List<Predicate<User>> filters) {
+    private void validateUser(JsonUser jsonUser, User user, String email, List<Predicate<User>> filters) {
         var filter = filters.stream()
                 .reduce(Predicate::and)
                 .orElse(x -> true);
 
-        getUserByEmail(user.getEmail())
+        getUserByEmail(jsonUser.getEmail())
                 .filter(filter)
                 .ifPresent(s -> {
-                    throw new UserAlreadyExistAuthenticationException(user.getEmail()
+                    throw new UserAlreadyExistAuthenticationException(jsonUser.getEmail()
                             .formatted("User with email %s already exists"));
                     }
                 );
+
+        if (email != null && !user.getUsername().equals(email)) {
+            throw new UnauthorisedAccessException("User %s unauthorized to edit user %s".formatted(email, jsonUser.getEmail()));
+        }
     }
 }
