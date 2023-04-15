@@ -6,9 +6,11 @@ import com.com3014.apigateway.model.json.JsonUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Objects;
 
@@ -34,7 +36,14 @@ public class AuthenticationService {
 
     public Role getUserRole(String email) {
         String url = "%s/api/users/email/%s".formatted(AUTH_SERVICE_BASE_URI, email);
-        JsonUser user = Objects.requireNonNull(restTemplate.getForObject(url, JsonUser.class));
-        return user.getRole();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("email", email);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<JsonUser> response = restTemplate.exchange(
+                url, HttpMethod.GET, requestEntity, JsonUser.class);
+
+        return Objects.requireNonNull(response.getBody()).getRole();
     }
 }

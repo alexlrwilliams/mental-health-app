@@ -66,8 +66,8 @@ public class UserController {
     @JsonView(User.Views.Public.class)
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email,
-                               @RequestHeader("X-Role-Header") Role userRole,
-                               @RequestHeader("email") String userEmail) {
+                               @RequestHeader(value = "X-Role-Header", required = false) Role userRole,
+                               @RequestHeader(value = "email") String userEmail) {
         validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), email, userEmail,
                 "User %s cannot access user %s information".formatted(userEmail, email));
         return userService.getUserByEmailOrThrow(email);
@@ -92,7 +92,7 @@ public class UserController {
 
     private void validateUserAccess(Role userRole, List<Role> validRoles, String email, String userEmail, String message) {
         var isUser = email != null && userEmail != null && Objects.equals(email, userEmail);
-        var hasRoleAccess = validRoles.contains(userRole);
+        var hasRoleAccess = userRole != null && validRoles.contains(userRole);
         if (!isUser && !hasRoleAccess) {
             throw new UnauthorisedAccessException(message);
         }
