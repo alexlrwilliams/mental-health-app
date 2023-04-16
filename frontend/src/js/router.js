@@ -6,6 +6,7 @@ import LoginPage from "@/pages/LoginPage.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import BookAppointmentPage from "@/pages/BookAppointmentPage.vue";
 import {refreshTokens} from "@/js/user-auth";
+import ProfilePage from "@/pages/ProfilePage.vue";
 
 Vue.use(Router);
 
@@ -14,6 +15,7 @@ const routes = [
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegisterPage },
     { path: '/book-appointment', component: BookAppointmentPage },
+    { path: '/profile', component: ProfilePage }
 ]
 
 const router = new Router({

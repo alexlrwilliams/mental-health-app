@@ -1,4 +1,4 @@
-import {get, post} from "@/js/http-requests";
+import {get, post, put} from "@/js/http-requests";
 
 
 export async function register(user) {
@@ -28,6 +28,12 @@ export async function refreshTokens(email, token) {
 
 export async function getUser(email, token) {
     return await get(`users/email/${email}`, email, token)
+        .then(handleRequest);
+}
+
+export async function updateUser(id, user, email, token) {
+    let body = JSON.stringify(user);
+    return await put(`users/${id}`, body, email, token)
         .then(handleRequest);
 }
 

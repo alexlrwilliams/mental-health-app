@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import {getUser, login, logout, register} from "@/js/user-auth";
+import {getUser, login, logout, register, updateUser} from "@/js/user-auth";
 import router from "@/js/router";
 import Vue from "vue";
 import {User} from "@/js/user";
@@ -70,6 +70,11 @@ const actions = {
     async refreshUser({ commit }, email) {
         await getUser(email)
             .then(async user => await commit('updateUser', user))
+    },
+    async updateUser({ commit, getters }, user) {
+        await updateUser(getters.user.id, user, getters.user.email)
+            .then(async user => await commit('updateUser', user))
+        commit('updateUser', user);
     }
 };
 
