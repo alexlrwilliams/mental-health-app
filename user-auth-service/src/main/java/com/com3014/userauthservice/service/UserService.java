@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
         var user = new User(
                 jsonUser.getEmail(),
                 encryptPassword(jsonUser.getPassword()),
-                jsonCreateUser.getRole(),
+                jsonUser.getRole(),
                 jsonUser.getFirstName(),
                 jsonUser.getLastName(),
                 jsonUser.getAddress()

@@ -4,7 +4,8 @@ import com.com3014.userauthservice.UnitTestHelper;
 import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.User;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonUpdateUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,10 @@ class UserControllerTest {
     private final User user1 = UnitTestHelper.testUser1;
     private final User user2 = UnitTestHelper.testUser2;
 
-    private final JsonUser jsonUser = UnitTestHelper.jsonUser;
+    private final JsonCreateUser jsonCreateUser = UnitTestHelper.JSON_CREATE_USER;
+
+    private final JsonUpdateUser jsonUpdateUser = UnitTestHelper.JSON_UPDATE_USER;
+
 
     private final List<User> allUsers = List.of(user1, user2);
 
@@ -61,7 +65,7 @@ class UserControllerTest {
 
     @Test
     void createUser() {
-        when(userService.createUser(jsonUser)).thenReturn(user1);
+        when(userService.createUser(jsonCreateUser)).thenReturn(user1);
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -72,13 +76,13 @@ class UserControllerTest {
         ResponseEntity<User> response = ResponseEntity
                 .created(location)
                 .body(user1);
-        assertThat(userController.createUser(jsonUser, bindingResult)).isEqualTo(response);
+        assertThat(userController.createUser(jsonCreateUser, bindingResult)).isEqualTo(response);
     }
 
     @Test
     void createUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        assertThatThrownBy(() -> userController.createUser(jsonUser, bindingResult));
+        assertThatThrownBy(() -> userController.createUser(jsonCreateUser, bindingResult));
         verify(userService, never()).createUser(any());
     }
 
@@ -115,14 +119,14 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
-        when(userService.updateUser(user1.getId(), jsonUser, "email")).thenReturn(user1);
-        assertThat(userController.updateUser(user1.getId(), jsonUser, bindingResult, "email")).isEqualTo(user1);
+        when(userService.updateUser(user1.getId(), jsonUpdateUser, "email")).thenReturn(user1);
+        assertThat(userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email")).isEqualTo(user1);
     }
 
     @Test
     void updateUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUser, bindingResult, "email"));
+        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email"));
         verify(userService, never()).updateUser(any(),any(), any());
     }
 }

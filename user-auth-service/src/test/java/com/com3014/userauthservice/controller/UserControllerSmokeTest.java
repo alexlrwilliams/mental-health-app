@@ -2,7 +2,8 @@ package com.com3014.userauthservice.controller;
 
 import com.com3014.userauthservice.UnitTestHelper;
 import com.com3014.userauthservice.model.Role;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonUpdateUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.service.UserService;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -62,7 +63,7 @@ class UserControllerSmokeTest {
 
     @Test
     public void createUser__valid() throws Exception {
-        when(userService.createUser(any(JsonUser.class))).thenReturn(UnitTestHelper.testUser1);
+        when(userService.createUser(any(JsonCreateUser.class))).thenReturn(UnitTestHelper.testUser1);
         mockMvc.perform(
                         post("/api/users")
                                 .with(csrf())
@@ -116,7 +117,7 @@ class UserControllerSmokeTest {
     public void updateUser__valid() throws Exception {
         var id = UUID.randomUUID();
         var email = "alex@gmail.com";
-        when(userService.updateUser(eq(id), any(JsonUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
+        when(userService.updateUser(eq(id), any(JsonUpdateUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
         mockMvc.perform(
                 put("/api/users/%s".formatted(id))
                         .with(csrf())
@@ -124,8 +125,6 @@ class UserControllerSmokeTest {
                         .content("""
                                 {
                                 	"email": "alex@gmail.com",
-                                	"password": "ahh",
-                                	"role": "PATIENT",
                                 	"firstName": "Alex",
                                 	"lastName": "Williams",
                                 	"address": "test"
@@ -140,12 +139,10 @@ class UserControllerSmokeTest {
     public void updateUser__not_valid() throws Exception {
         var id = UUID.randomUUID();
         var email = "email@email.com";
-        when(userService.updateUser(eq(id), any(JsonUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
+        when(userService.updateUser(eq(id), any(JsonUpdateUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
         var expectedMessage = List.of("lastName must not be blank",
-                "role must not be null",
                 "address must not be blank",
                 "email must be a well-formed email address",
-                "password must not be blank",
                 "firstName must not be blank");
         mockMvc.perform(
                         put("/api/users/%s".formatted(id))
@@ -154,7 +151,6 @@ class UserControllerSmokeTest {
                                 .content("""
                                 {
                                 	"email": "ail.com",
-                                	"password": "",
                                 	"firstName": "",
                                 	"lastName": "",
                                 	"address": ""
