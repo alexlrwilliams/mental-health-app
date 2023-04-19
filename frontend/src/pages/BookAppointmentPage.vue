@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @submit.prevent="login">
+    <b-form @submit.prevent="book" >
       <AppointmentBookingSection title="Book your appointment" >
         <p>Please fill in the forms below to book your appointment.</p>
       </AppointmentBookingSection>
@@ -20,7 +20,7 @@
           </b-form-group>
 
           <div class="booking-section-btn">
-            <b-button variant="primary" class='booking-section-btn-proceed' v-model="type" :disabled="description===''"  @click="proceedToSection2">Proceed to calendar</b-button>
+            <b-button variant="primary" class='booking-section-btn-proceed' :disabled="description===''"  @click="proceedToSection2">Proceed to calendar</b-button>
           </div>
         </b-form>
       </AppointmentBookingSection>
@@ -58,21 +58,27 @@
       </AppointmentBookingSection>
 
       <AppointmentBookingSection ref="section4" title="Which doctor you like an appointment with?" label="Please chose one of the following available doctors.">
-        <b-form-radio-group buttons button-variant="outline-secondary" class="doctor-radios" v-model="selectedDoctor" :disabled="!section3Complete">
+        <div class="d-flex justify-content-center mb-3" v-if="fetching">
+          <b-spinner label="Loading..."></b-spinner>
+        </div>
+        <b-form-radio-group v-else buttons button-variant="outline-secondary" class="doctor-radios" v-model="selectedDoctor" :disabled="!section3Complete">
           <AvailableDocTicket v-for="(doctor, index) in availableDoctors" :key="index" :doctor="doctor" />
         </b-form-radio-group>
       </AppointmentBookingSection>
 
+
       <div class="booking-section-btn">
           <b-button type="submit" variant="success" class='booking-section-btn-proceed' :disabled="selectedDoctor === ''">Book appointment</b-button><br>
       </div>
-    </div>
+    </b-form>
   </div>
 </template>
 
 <script>
 import AppointmentBookingSection from "@/components/AppointmentBookingSection.vue";
 import AvailableDocTicket from "@/components/AvailableDocTicket.vue";
+import moment from "moment";
+import {bookAppointment, getAvailableDoctors} from "@/js/appointments";
 
 export default {
   components: {
@@ -94,31 +100,12 @@ export default {
 
       selectedDoctor: '',
 
-      availableDoctors: [
-        {
-          "id": "0e5c9e0e-65a1-48c1-a8b3-84fe12204055",
-          "username": "lmao@surrey.ac.uk",
-          "hospital": "Lister Hospital",
-          "firstName": "Alex",
-          "lastName": "Williams",
-          "role": "DOCTOR",
-        },
-        {
-          "id": "0e4c9e0e-64a1-48c1-a8b3-84fe12204055",
-          "username": "lmao@surrey.ac.uk",
-          "firstName": "Ahmed",
-          "lastName": "Henine",
-          "role": "DOCTOR",
-        },
-        {
-          "id": "0f3c8e0e-64a1-48c1-a8b3-84fe12204055",
-          "username": "lmao@surrey.ac.uk",
-          "firstName": "Jennifer",
-          "lastName": "Maria",
-          "role": "DOCTOR",
-        }
-      ]
+      availableDoctors: [],
 
+      fetching: false,
+
+      startTime: "",
+      endTime: ""
     }
   },
   name: 'BookAppointmentForm',
@@ -128,19 +115,28 @@ export default {
       sectionToScroll.$refs.header.scrollIntoView({ behavior: 'smooth' });
     },
     proceedToSection2() {
-      // Your code to validate section 1 goes here
       this.proceedToSection("section1Complete", this.$refs.section2);
     },
     proceedToSection3() {
-      // Your code to validate section 2 goes here
       this.proceedToSection("section2Complete", this.$refs.section3);
     },
-    proceedToSection4() {
-      // Your code to validate section 3 goes here
+    async proceedToSection4() {
       this.proceedToSection("section3Complete", this.$refs.section4);
+      this.fetching = true;
+      this.startTime = moment(`${this.selectedDate},${this.selectedTime}`, "YYYY-MM-DD,hh:mm:ss");
+      this.endTime = this.startTime.clone().add(30, 'minutes');
+      this.availableDoctors = await getAvailableDoctors(this.startTime.toISOString(), this.endTime.toISOString())
+      this.fetching = false;
     },
     book() {
-
+      bookAppointment({
+        docId: this.selectedDoctor,
+        startTime: this.startTime.toISOString(),
+        endTime: this.endTime.toISOString(),
+        patientId: this.$store.getters.user.id,
+        summary: this.description,
+        type: this.appointmentType
+      });
     }
   }
 }

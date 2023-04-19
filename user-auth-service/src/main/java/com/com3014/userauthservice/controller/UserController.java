@@ -40,6 +40,12 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @JsonView(User.Views.Public.class)
+    @GetMapping("/doctors")
+    public List<User> getAllDoctors() {
+        return userService.getAllDoctors();
+    }
+
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody JsonCreateUser jsonUser,
                                            BindingResult bindingResult) {

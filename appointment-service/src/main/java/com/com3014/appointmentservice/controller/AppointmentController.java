@@ -11,22 +11,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/appointments")
-public class AppointmentController
- {
-    
-   
+public class AppointmentController {
     private final  AppointmentService appointmentService;
     @Autowired
     public AppointmentController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
-   
+
+    @GetMapping
+    public List<Appointment> getAllAppointments(@RequestParam(name = "startTime", required = false) Instant startTime, @RequestParam(name = "endTime", required = false) Instant endTime) {
+        if (startTime == null || endTime == null) {
+            return appointmentService.getAllAppointments();
+        } else {
+            return appointmentService.getAppointmentsBetween(startTime, endTime);
+        }
+    }
+
     @PostMapping
     public Appointment createAppointment(@RequestBody AppointmentJson json){
         return appointmentService.createAppointment(json);
@@ -36,11 +38,11 @@ public class AppointmentController
      public Optional<Appointment> getAppointmentById(@PathVariable UUID id){
         return appointmentService.getAppointmentById(id);
     }
-
     @PutMapping("/{id}")
     public Appointment updateAppointment(@PathVariable UUID id,@RequestBody AppointmentJson json){
         return appointmentService.updateAppointment(id,json);
     }
+
     @DeleteMapping("/{id}")
     public void deleteAppointment(@PathVariable UUID id){
         appointmentService.deleteAppointment(id);
@@ -60,14 +62,4 @@ public class AppointmentController
     public List<Appointment> findByType(@RequestParam("type")String type){
         return appointmentService.findByType(type);
     }
-
-    @GetMapping()
-    public List<Appointment> getAllAppointments(@RequestParam(name = "startTime", required = false) Instant startTime, @RequestParam(name = "endTime", required = false) Instant endTime) {
-    if (startTime == null || endTime == null) {
-        return appointmentService.getAllAppointments();
-    } else {
-        return appointmentService.getAppointmentsBetween(startTime, endTime);
-    }
-}
-    
 }

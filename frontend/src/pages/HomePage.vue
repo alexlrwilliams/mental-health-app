@@ -5,7 +5,7 @@
       <b-tabs content-class="mt-3">
         <AppointmentTab @cancelEvent="cancel" :fetching="fetching" class="appointment-tab-title" title="Upcoming" :appointments="upcomingAppointments" dot-class="upcoming-dot" :active="true"/>
         <AppointmentTab :fetching="fetching" title="Previous" :appointments="previousAppointments" dot-class="previous-dot"/>
-        <AppointmentTab :fetching="fetching" title="Cancelled" :appointments="cancelledAppointments" header-class="cancelled-title"/>
+        <AppointmentTab v-if="isPatient" :fetching="fetching" title="Cancelled" :appointments="cancelledAppointments" header-class="cancelled-title"/>
       </b-tabs>
     </div>
   </div>
@@ -13,7 +13,7 @@
 
 <script>
 import AppointmentTab from "@/components/AppointmentTab.vue";
-import {getUserAppointments} from "@/js/appointments";
+import {getDoctorAppointments, getUserAppointments} from "@/js/appointments";
 export default {
   name: 'HomePage', 
   components: {
@@ -27,7 +27,11 @@ export default {
   },
   async created() {
     this.fetching = true;
-    this.appointments = await getUserAppointments(this.$store.getters.user.id);
+    if (this.isPatient) {
+      this.appointments = await getUserAppointments(this.$store.getters.user.id);
+    } else if (this.isDoctor) {
+      this.appointments = await getDoctorAppointments(this.$store.getters.user.id);
+    }
     this.fetching = false;
   },
   computed: {
@@ -48,6 +52,9 @@ export default {
     },
     isPatient() {
       return this.$store.getters.user.role === "PATIENT";
+    },
+    isDoctor() {
+      return this.$store.getters.user.role === "DOCTOR";
     }
   },
   methods: {

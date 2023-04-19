@@ -19,8 +19,13 @@
         </template>
 
         <template v-else>
-            <b-card-text>
+            <b-card-text v-if="isPatient">
                 Your appointment with Dr. <b>{{ this.doctorName }}</b> is now confirmed. You will be able to join the appointment 10min before the booked timing.
+            </b-card-text>
+            <b-card-text v-else>
+              You have an appointment with <b>{{ this.patientName }}</b>. Here is their summary:
+              <br>
+              {{ appointment.summary }}
             </b-card-text>
             <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
             <b-button @click="cancel" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
@@ -56,8 +61,13 @@ export default {
   },
   async created() {
     this.fetching = true;
-    const doctor = await getUserById(this.appointment.docId);
-    this.doctorName = `${doctor.firstName} ${doctor.lastName}`;
+    if (this.isPatient) {
+      const doctor = await getUserById(this.appointment.docId);
+      this.doctorName = `${doctor.firstName} ${doctor.lastName}`;
+    } else {
+      const patient = await getUserById(this.appointment.patientId);
+      this.patientName = `${patient.firstName} ${patient.lastName}`;
+    }
     this.fetching = false;
   },
   computed: {

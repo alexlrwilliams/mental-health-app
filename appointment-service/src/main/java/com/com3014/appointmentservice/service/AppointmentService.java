@@ -81,6 +81,11 @@ public class AppointmentService {
    }
    
     public List<Appointment> getAppointmentsBetween(Instant startTime,Instant endTime) {
-       return appointmentRepository.findByStartTimeAfterAndEndTimeBefore(startTime,endTime);
+       var list1 = appointmentRepository.findAppointmentByStartTimeBetween(startTime, endTime);
+       var list2 = appointmentRepository.findAppointmentByEndTimeBetween(startTime, endTime);
+       var list3 = appointmentRepository.findAppointmentByStartTimeBeforeAndEndTimeAfter(startTime, endTime);
+        list1.addAll(list2);
+        list1.addAll(list3);
+       return list1;
     } 
 }
