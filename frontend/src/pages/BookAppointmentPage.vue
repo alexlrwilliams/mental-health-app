@@ -1,6 +1,10 @@
 <template>
   <div>
     <b-form @submit.prevent="book" >
+      <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+        An error occurred, please try again.
+      </b-alert>
+
       <AppointmentBookingSection title="Book your appointment" >
         <p>Please fill in the forms below to book your appointment.</p>
       </AppointmentBookingSection>
@@ -87,6 +91,7 @@ export default {
   },
   data() {
     return {
+      showDismissibleAlert: false,
       section1Complete: false,
       section2Complete: false,
       section3Complete: false,
@@ -136,6 +141,13 @@ export default {
         patientId: this.$store.getters.user.id,
         summary: this.description,
         type: this.appointmentType
+      }).then(
+          () => this.$router.push("/")
+      )
+      .catch(exception => {
+        console.log(exception.status, exception.statusText);
+        document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
+        this.showDismissibleAlert = true;
       });
     }
   }

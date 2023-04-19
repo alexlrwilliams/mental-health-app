@@ -11,9 +11,13 @@
         </template>
 
         <template v-else-if="isAppointmentPrevious">
-          <b-card-text>
+          <b-card-text v-if="isPatient">
             Your appointment with Dr. <b>{{ this.doctorName }}</b> has terminated.
             {{ appointment.type === 'CHAT' ? ' However, you are still able to access your previous chat with the doctor, by clicking the button below.' : '' }}
+          </b-card-text>
+          <b-card-text v-else>
+            Your appointment with <b>{{ this.patientName }}</b> has terminated.
+            {{ appointment.type === 'CHAT' ? ' However, you are still able to access your previous chat with the patient, by clicking the button below.' : '' }}
           </b-card-text>
           <b-button v-if="appointment.type === 'CHAT'" class="chat-access" variant="primary">Access chat</b-button>
         </template>
@@ -28,7 +32,10 @@
               {{ appointment.summary }}
             </b-card-text>
             <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
-            <b-button @click="cancel" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
+            <b-button @click="show" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
+            <b-modal @ok="cancel" ok-variant="danger" :id="`modal-${appointment.id}`" centered title="Confirm" ok-title="Confirm" cancel-title="Cancel">
+              Please confirm you want to delete your appointment with <b>{{ this.doctorName }}</b>. Once you cancel an appointment, you cannot undo it. However, you can still access it in the "cancelled" tab.
+            </b-modal>
         </template>
       </b-card>
   </div>
@@ -50,13 +57,18 @@ export default {
   data() {
     return {
       fetching: false,
-      doctorName: undefined
+      doctorName: undefined,
+      patientName: undefined,
+      test: ""
     }
   },
   methods: {
     async cancel() {
       await updateAppointment(this.appointment.id, {...this.appointment, cancelled: true});
       this.$emit("cancelEvent", this.appointment.id);
+    },
+    show() {
+      this.$bvModal.show(`modal-${this.appointment.id}`);
     }
   },
   async created() {
@@ -88,7 +100,7 @@ export default {
       const now = new Date();
       const endTime = new Date(this.appointment.endTime);
       const startTime = new Date(this.appointment.startTime);
-      return startTime > now && endTime < now;
+      return startTime < now && endTime > now;
     },
     isPatient() {
       return this.$store.getters.user.role === "PATIENT";

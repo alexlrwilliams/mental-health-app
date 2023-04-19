@@ -48,7 +48,9 @@ export default {
           .sort((a, b) => new Date(b.endTime) - new Date(a.endTime));
     },
     cancelledAppointments() {
-      return this.appointments.filter(appointment => appointment.cancelled);
+      return this.appointments
+          .filter(appointment => appointment.cancelled)
+          .sort((a, b) => new Date(b.endTime) - new Date(a.endTime));
     },
     isPatient() {
       return this.$store.getters.user.role === "PATIENT";

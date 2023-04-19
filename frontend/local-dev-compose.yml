@@ -9,6 +9,9 @@ services:
   user-auth-service:
     container_name: user-auth-service
     image: alexwilliams2001/group13-docker-repo:user-auth-service
+  appointment-service:
+    container_name: appointment-service
+    image: alexwilliams2001/group13-docker-repo:appointment-service
   api-gateway:
     container_name: api-gateway
     image: alexwilliams2001/group13-docker-repo:api-gateway
