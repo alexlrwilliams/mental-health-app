@@ -18,7 +18,7 @@ export class User {
         user.lastName = jsonUser.lastName;
         user.address = jsonUser.address;
         user.role = jsonUser.role;
-        user.email = jsonUser.username;
+        user.email = jsonUser.email || jsonUser.username;
         return user;
     }
 

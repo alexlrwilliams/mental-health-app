@@ -79,6 +79,7 @@ export default {
     },
     async saveChanges() {
       await this.$store.dispatch('updateUser', {
+        id: this.$store.getters.user.id,
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.emailAddress,
