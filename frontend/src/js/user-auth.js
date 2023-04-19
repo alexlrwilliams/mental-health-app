@@ -1,4 +1,5 @@
 import {get, post, put} from "@/js/http-requests";
+import {handleRequest} from "@/js/request_helpers";
 
 
 export async function register(user) {
@@ -31,15 +32,13 @@ export async function getUser(email, token) {
         .then(handleRequest);
 }
 
+export async function getUserById(user) {
+    return await get(`users/${user}`)
+        .then(handleRequest);
+}
+
 export async function updateUser(id, user, email, token) {
     let body = JSON.stringify(user);
     return await put(`users/${id}`, body, email, token)
         .then(handleRequest);
-}
-
-function handleRequest(response) {
-    if (response.ok) {
-        return response.json();
-    }
-    return Promise.reject(response);
 }

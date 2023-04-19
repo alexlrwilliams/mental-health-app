@@ -34,9 +34,9 @@ public class AppointmentController
 
     @GetMapping("/{id}")
      public Optional<Appointment> getAppointmentById(@PathVariable UUID id){
-            return appointmentService.getAppointmentById(id);
+        return appointmentService.getAppointmentById(id);
+    }
 
-        }
     @PutMapping("/{id}")
     public Appointment updateAppointment(@PathVariable UUID id,@RequestBody AppointmentJson json){
         return appointmentService.updateAppointment(id,json);
@@ -49,8 +49,13 @@ public class AppointmentController
     @GetMapping("/patient/{patientId}")
     public List<Appointment> getAppointmentByPatientId(@PathVariable UUID patientId) {
         return appointmentService.getAppointmentByPatientId(patientId);
-
     }
+
+     @GetMapping("/doctor/{doctorId}")
+     public List<Appointment> getAppointmentByDoctorId(@PathVariable UUID doctorId) {
+         return appointmentService.getAppointmentByDoctorId(doctorId);
+     }
+
     @GetMapping("/type")
     public List<Appointment> findByType(@RequestParam("type")String type){
         return appointmentService.findByType(type);

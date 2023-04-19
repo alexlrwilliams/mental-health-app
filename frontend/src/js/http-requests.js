@@ -1,4 +1,4 @@
-import {authHeader} from "@/js/auth_helpers";
+import {authHeader, emailHeader} from "@/js/request_helpers";
 
 const API_URL = "http://localhost:8081/api";
 
@@ -20,7 +20,7 @@ async function request(requestType, path, body, email, token, options, headers) 
         headers: new Headers({
             'Accept': 'application/json',
             'content-type': 'application/json',
-            'email': email,
+            'email': emailHeader(email),
             'Authorization': authHeader(token),
             ...headers
         }),

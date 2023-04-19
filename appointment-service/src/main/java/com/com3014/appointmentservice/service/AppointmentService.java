@@ -46,6 +46,8 @@ public class AppointmentService {
          appointment.setsummary(json.getsummary());
          appointment.settype(json.gettype());
          appointment.setcancelled(json.getcancelled());
+         appointment.setpatientId(json.getpatientId());
+         appointment.setdocId(json.getdocId());
 
         return appointmentRepository.save(appointment);
     }
@@ -64,6 +66,10 @@ public class AppointmentService {
 
     public List<Appointment> getAppointmentByPatientId(UUID patientId){
         return appointmentRepository.findByPatientId(patientId);
+    }
+
+    public List<Appointment> getAppointmentByDoctorId(UUID doctorId){
+        return appointmentRepository.findBydocId(doctorId);
     }
 
    public List<Appointment> findByType(String type){
