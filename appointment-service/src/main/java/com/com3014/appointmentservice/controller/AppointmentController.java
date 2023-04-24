@@ -4,7 +4,12 @@ import com.com3014.appointmentservice.model.Appointment;
 import com.com3014.appointmentservice.model.json.AppointmentJson;
 import com.com3014.appointmentservice.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+
 
 import java.time.Instant;
 import java.util.List;
@@ -30,8 +35,14 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody AppointmentJson json){
-        return appointmentService.createAppointment(json);
+    public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentJson json, BindingResult result){
+        if (result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+            return ResponseEntity.badRequest().body(errors);
+        }
+    
+        Appointment appointment = appointmentService.createAppointment(json);
+        return ResponseEntity.ok(appointment);
     }
 
     @GetMapping("/{id}")
