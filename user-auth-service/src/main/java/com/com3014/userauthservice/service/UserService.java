@@ -2,6 +2,7 @@ package com.com3014.userauthservice.service;
 
 import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
+import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonAuth;
 import com.com3014.userauthservice.model.json.JsonTokenResponse;
@@ -102,6 +103,10 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    public List<User> getAllDoctors() {
+        return userRepository.findUsersByRole(Role.DOCTOR);
     }
 
     public Optional<User> getUserByEmail(String email) {

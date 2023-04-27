@@ -46,6 +46,8 @@ public class AppointmentService {
          appointment.setsummary(json.getsummary());
          appointment.settype(json.gettype());
          appointment.setcancelled(json.getcancelled());
+         appointment.setpatientId(json.getpatientId());
+         appointment.setdocId(json.getdocId());
 
         return appointmentRepository.save(appointment);
     }
@@ -66,6 +68,10 @@ public class AppointmentService {
         return appointmentRepository.findByPatientId(patientId);
     }
 
+    public List<Appointment> getAppointmentByDoctorId(UUID doctorId){
+        return appointmentRepository.findBydocId(doctorId);
+    }
+
    public List<Appointment> findByType(String type){
     return appointmentRepository.findByType(type);
    }
@@ -75,6 +81,11 @@ public class AppointmentService {
    }
    
     public List<Appointment> getAppointmentsBetween(Instant startTime,Instant endTime) {
-       return appointmentRepository.findByStartTimeAfterAndEndTimeBefore(startTime,endTime);
+       var list1 = appointmentRepository.findAppointmentByStartTimeBetween(startTime, endTime);
+       var list2 = appointmentRepository.findAppointmentByEndTimeBetween(startTime, endTime);
+       var list3 = appointmentRepository.findAppointmentByStartTimeBeforeAndEndTimeAfter(startTime, endTime);
+        list1.addAll(list2);
+        list1.addAll(list3);
+       return list1;
     } 
 }
