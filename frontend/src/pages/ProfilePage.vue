@@ -42,7 +42,7 @@ export default {
       lastName: '',
       homeAddress: '',
       role: '',
-      hospital: 'Royal hospital Guildford',
+      hospital: '',
       emailAddress: '',
 
       isDisabled: true,
@@ -59,6 +59,7 @@ export default {
     this.homeAddress = this.user.address;
     this.role = this.user.role;
     this.firstName = this.user.firstName;
+    this.hospital = this.user.hospital;
   },
   methods: {
     openFileSelector() {
@@ -84,7 +85,8 @@ export default {
         lastName: this.lastName,
         email: this.emailAddress,
         role: this.role,
-        address: this.homeAddress
+        address: this.homeAddress,
+        hospital: this.hospital,
       })
       this.isDisabled = true;
     }

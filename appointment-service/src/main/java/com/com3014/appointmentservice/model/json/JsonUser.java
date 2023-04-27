@@ -11,10 +11,12 @@ public class JsonUser {
     private String lastName;
     private String address;
 
+    private String hospital;
+
     public JsonUser() {
     }
 
-    public JsonUser(String username, String password, Role role,
+    public JsonUser(String username, Role role,
                     String firstName, String lastName, String address) {
         this.username = username;
         this.role = role;
@@ -69,5 +71,13 @@ public class JsonUser {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 }

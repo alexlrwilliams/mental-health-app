@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @JsonView(Views.Public.class)
     private String address;
 
+    @JsonView(Views.Public.class)
+    private String hospital;
+
     public User() {
     }
 
@@ -132,6 +135,15 @@ public class User implements UserDetails {
 
     public User setAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public User setHospital(String hospital) {
+        this.hospital = hospital;
         return this;
     }
 

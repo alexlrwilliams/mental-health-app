@@ -84,7 +84,8 @@ public class UserService implements UserDetailsService {
                 .setFirstName(jsonUser.getFirstName())
                 .setLastName(jsonUser.getLastName())
                 .setUsername(jsonUser.getEmail())
-                .setAddress(jsonUser.getAddress());
+                .setAddress(jsonUser.getAddress())
+                .setHospital(jsonUser.getHospital());
         return userRepository.save(updatedUser);
     }
 

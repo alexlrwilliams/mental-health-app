@@ -13,6 +13,9 @@ services:
     image: alexwilliams2001/group13-docker-repo:user-auth-service
     ports:
       - "8082:8082"
+  appointment-service:
+    container_name: appointment-service
+    image: alexwilliams2001/group13-docker-repo:appointment-service
 volumes:
   cache:
     driver: local

@@ -23,8 +23,10 @@ public class UnitTestHelper {
     public static final Role ROLE_1 = Role.ADMIN;
     public static final Role ROLE_2 = Role.PATIENT;
 
+    public static final String HOSPITAL = "HOSPITAL";
+
     public static final JsonCreateUser JSON_CREATE_USER = new JsonCreateUser(EMAIL, PASSWORD, ROLE_1, FIRST_NAME, LAST_NAME, ADDRESS);
-    public static final JsonUpdateUser JSON_UPDATE_USER = new JsonUpdateUser(EMAIL, FIRST_NAME, LAST_NAME, ADDRESS);
+    public static final JsonUpdateUser JSON_UPDATE_USER = new JsonUpdateUser(EMAIL, FIRST_NAME, LAST_NAME, ADDRESS, HOSPITAL);
     public static final User testUser1 = new User(EMAIL, PASSWORD, ROLE_1, FIRST_NAME, LAST_NAME, ADDRESS);
     public static final User testUser2 = new User(EMAIL_2, PASSWORD, ROLE_2, FIRST_NAME_2, LAST_NAME_2, ADDRESS);
 }
