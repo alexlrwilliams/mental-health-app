@@ -5,7 +5,8 @@ import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.exceptions.UserNotValidException;
 import com.com3014.userauthservice.model.Role;
 import com.com3014.userauthservice.model.User;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonUpdateUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.service.UserService;
 import jakarta.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody JsonUser jsonUser,
+    public ResponseEntity<User> createUser(@Valid @RequestBody JsonCreateUser jsonUser,
                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             var errors = ValidationUtils.getErrorMessages(bindingResult).toString();
@@ -66,8 +67,8 @@ public class UserController {
     @JsonView(User.Views.Public.class)
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email,
-                               @RequestHeader("X-Role-Header") Role userRole,
-                               @RequestHeader("email") String userEmail) {
+                               @RequestHeader(value = "X-Role-Header", required = false) Role userRole,
+                               @RequestHeader(value = "email") String userEmail) {
         validateUserAccess(userRole, List.of(Role.DOCTOR, Role.ADMIN), email, userEmail,
                 "User %s cannot access user %s information".formatted(userEmail, email));
         return userService.getUserByEmailOrThrow(email);
@@ -80,7 +81,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable UUID id,
-                           @Valid @RequestBody JsonUser jsonUser,
+                           @Valid @RequestBody JsonUpdateUser jsonUser,
                            BindingResult bindingResult,
                            @RequestHeader("email") String email) {
         if (bindingResult.hasErrors()) {
@@ -92,7 +93,7 @@ public class UserController {
 
     private void validateUserAccess(Role userRole, List<Role> validRoles, String email, String userEmail, String message) {
         var isUser = email != null && userEmail != null && Objects.equals(email, userEmail);
-        var hasRoleAccess = validRoles.contains(userRole);
+        var hasRoleAccess = userRole != null && validRoles.contains(userRole);
         if (!isUser && !hasRoleAccess) {
             throw new UnauthorisedAccessException(message);
         }

@@ -32,21 +32,35 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   data() {
     return {
-      profilePicture: 'path/to/default-profile-picture.jpg',
-      firstName: 'Ahmed',
-      lastName: 'Henine',
-      homeAddress: 'Battersea Course, Spiers House, Guildford, GU2 7JQ',
-      role: 'DOCTOR',
+      profilePicture: '',
+      firstName: '',
+      lastName: '',
+      homeAddress: '',
+      role: '',
       hospital: 'Royal hospital Guildford',
-      emailAddress: 'ahmedhenine@gmail.com',
+      emailAddress: '',
 
       isDisabled: true,
     }
   },
-    methods: {
+  computed: {
+    ...mapGetters(['user']),
+  },
+  created() {
+    this.profilePicture = 'path/to/default-profile-picture.jpg'; //fetch s3 picture from url?
+    this.firstName = this.user.firstName;
+    this.lastName = this.user.lastName;
+    this.emailAddress = this.user.email;
+    this.homeAddress = this.user.address;
+    this.role = this.user.role;
+    this.firstName = this.user.firstName;
+  },
+  methods: {
     openFileSelector() {
       this.$refs.fileInput.click();
     },
@@ -63,7 +77,15 @@ export default {
     EditProfile() {
       this.isDisabled = false;
     },
-    saveChanges() {
+    async saveChanges() {
+      await this.$store.dispatch('updateUser', {
+        id: this.$store.getters.user.id,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.emailAddress,
+        role: this.role,
+        address: this.homeAddress
+      })
       this.isDisabled = true;
     }
   },

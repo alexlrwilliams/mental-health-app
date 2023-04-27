@@ -5,7 +5,9 @@ import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationExce
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonAuth;
 import com.com3014.userauthservice.model.json.JsonTokenResponse;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonUpdateUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
+import com.com3014.userauthservice.model.json.user.JsonUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,7 +42,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User createUser(JsonUser jsonUser) {
+    public User createUser(JsonCreateUser jsonUser) {
         validateUser(jsonUser);
         var user = new User(
                 jsonUser.getEmail(),
@@ -68,7 +70,7 @@ public class UserService implements UserDetailsService {
         userRepository.delete(getUserByIdOrThrow(id));
     }
 
-    public User updateUser(UUID id, JsonUser jsonUser, String email) {
+    public User updateUser(UUID id, JsonUpdateUser jsonUser, String email) {
         List<Predicate<User>> filters = List.of(
                 (User user) -> !user.getId().equals(id)
         );
@@ -81,9 +83,7 @@ public class UserService implements UserDetailsService {
                 .setFirstName(jsonUser.getFirstName())
                 .setLastName(jsonUser.getLastName())
                 .setUsername(jsonUser.getEmail())
-                .setPassword(encryptPassword(jsonUser.getPassword()))
-                .setAddress(jsonUser.getAddress())
-                .setRole(jsonUser.getRole());
+                .setAddress(jsonUser.getAddress());
         return userRepository.save(updatedUser);
     }
 
@@ -117,7 +117,7 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.encode(password);
     }
 
-    private void validateUser(JsonUser jsonUser) {
+    private void validateUser(JsonCreateUser jsonUser) {
         validateUser(jsonUser, null, null, List.of());
     }
 

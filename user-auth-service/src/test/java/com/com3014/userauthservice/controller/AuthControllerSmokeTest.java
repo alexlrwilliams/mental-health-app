@@ -3,7 +3,7 @@ package com.com3014.userauthservice.controller;
 import com.com3014.userauthservice.UnitTestHelper;
 import com.com3014.userauthservice.model.json.JsonAuth;
 import com.com3014.userauthservice.model.json.JsonTokenResponse;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.repository.RedisTokenRepository;
 import com.com3014.userauthservice.service.JwtService;
 import com.com3014.userauthservice.service.UserService;
@@ -16,13 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
@@ -53,7 +51,7 @@ class AuthControllerSmokeTest {
 
     @Test
     public void register__valid() throws Exception {
-        when(userService.createUser(any(JsonUser.class))).thenReturn(UnitTestHelper.testUser1);
+        when(userService.createUser(any(JsonCreateUser.class))).thenReturn(UnitTestHelper.testUser1);
         mockMvc.perform(
                         post("/api/auth/register")
                                 .with(csrf())

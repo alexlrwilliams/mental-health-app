@@ -6,16 +6,14 @@ import com.com3014.userauthservice.exceptions.UserNotValidException;
 import com.com3014.userauthservice.model.BlacklistedToken;
 import com.com3014.userauthservice.model.json.JsonAuth;
 import com.com3014.userauthservice.model.json.JsonTokenResponse;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.model.json.TokenValidationRequest;
 import com.com3014.userauthservice.repository.RedisTokenRepository;
 import com.com3014.userauthservice.service.JwtService;
 import com.com3014.userauthservice.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JsonTokenResponse> register(@Valid @RequestBody JsonUser jsonUser,
+    public ResponseEntity<JsonTokenResponse> register(@Valid @RequestBody JsonCreateUser jsonUser,
                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             var errors = ValidationUtils.getErrorMessages(bindingResult).toString();

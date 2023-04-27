@@ -14,11 +14,11 @@
                 <b-icon-person-circle/>
               </template>
               <b-dropdown-text style="width: 240px;">
-                INSERT NAME
+                {{ userName }}
               </b-dropdown-text>
               <b-dropdown-item to="profile">Your Profile</b-dropdown-item>
               <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item>Log out</b-dropdown-item>
+              <b-dropdown-item @click="logout">Log out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -26,3 +26,20 @@
     </b-navbar>
   </div>
 </template>
+
+<script>
+import {mapActions} from "vuex";
+
+export default {
+  name: 'NavBar',
+  computed: {
+    userName() {
+      const user = this.$store.getters.user;
+      return user ? `${user.firstName} ${user.lastName}` : "";
+    }
+  },
+  methods: {
+    ...mapActions(['logout']),
+  }
+}
+</script>

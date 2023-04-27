@@ -7,7 +7,7 @@ import com.com3014.userauthservice.model.BlacklistedToken;
 import com.com3014.userauthservice.model.User;
 import com.com3014.userauthservice.model.json.JsonAuth;
 import com.com3014.userauthservice.model.json.JsonTokenResponse;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
 import com.com3014.userauthservice.model.json.TokenValidationRequest;
 import com.com3014.userauthservice.repository.RedisTokenRepository;
 import com.com3014.userauthservice.service.JwtService;
@@ -61,14 +61,14 @@ class AuthControllerTest {
 
     private final TokenValidationRequest tokenValidationRequest = new TokenValidationRequest("email", "token");
 
-    private final JsonUser jsonUser = UnitTestHelper.jsonUser;
+    private final JsonCreateUser jsonCreateUser = UnitTestHelper.JSON_CREATE_USER;
 
     private final JsonTokenResponse jsonTokenResponse = new JsonTokenResponse("access", "refresh");
 
 
     @Test
     void register() {
-        when(userService.createUser(jsonUser)).thenReturn(user1);
+        when(userService.createUser(jsonCreateUser)).thenReturn(user1);
         when(jwtService.generateTokenResponse(user1)).thenReturn(jsonTokenResponse);
 
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
@@ -82,13 +82,13 @@ class AuthControllerTest {
                 .created(location)
                 .body(jsonTokenResponse);
 
-        assertThat(authController.register(jsonUser, bindingResult)).isEqualTo(response);
+        assertThat(authController.register(jsonCreateUser, bindingResult)).isEqualTo(response);
     }
 
     @Test
     void register__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        assertThatThrownBy(() -> authController.register(jsonUser, bindingResult))
+        assertThatThrownBy(() -> authController.register(jsonCreateUser, bindingResult))
                 .isInstanceOf(UserNotValidException.class);
         verify(userService, never()).createUser(any());
         verify(jwtService, never()).generateTokenResponse(any());

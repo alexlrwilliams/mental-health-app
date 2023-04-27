@@ -1,11 +1,14 @@
 <template>
   <div class="login-container">
-    <b-card class="login-form">
+    <b-card no-body class="login-form">
       <b-card-header>
         <h4><b>Log into your account:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b>. Please Login to your account or create an account if you don't have one.</p>
+        <p>Welcome to <b>EvenBetterHealth</b>. Log into your account or create an account if you don't have one.</p>
       </b-card-header>
       <b-card-body>
+        <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+          Email or Password incorrect.
+        </b-alert>
         <b-form @submit.prevent="login" >
           <b-form-group id="email-group"
                         label="Email address:"
@@ -25,14 +28,12 @@
                           v-model="password"
                           required></b-form-input>
           </b-form-group>
-
-          <div class="login-form__buttons">
-            <b-button type="submit" variant="success" class='login-form__login'>Log in</b-button> 
-            <b-button to='/register' variant="primary" class='login-form__signup'>Register an account</b-button>
-          </div>
-          
+          <b-button type="submit" variant="success" class='login-form__login'>Log in</b-button>
         </b-form>
       </b-card-body>
+      <template #footer>
+        New User? <b-link to='/register'>Create an account.</b-link>
+      </template>
     </b-card>
   </div>
 </template>
@@ -42,13 +43,18 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      showDismissibleAlert: false,
     }
   },
   name: 'LoginPage',
   methods: {
-    login() {
-      
+    async login() {
+      await this.$store.dispatch('login', this.$data)
+          .catch(exception => {
+            console.log(exception.status, exception.statusText);
+            this.showDismissibleAlert = true;
+          });
     }
   }
 }
@@ -58,20 +64,9 @@ export default {
   .card-header h4 {
     margin-bottom: 0;
   }
-  .login-form__buttons b-button{
-    display: inline-block;
-    flex-direction: column;
-    align-items: center;
-  }
   .login-form__login {
     width: 100%;
     border-radius: 13px;
-    margin-bottom: 2px
-  }
-  .login-form__signup {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 2px
   }
   .login-container {
     display: flex;
@@ -85,5 +80,8 @@ export default {
   .login-form {
     width: 40%;
     margin: 0 auto;
+  }
+  .card-footer {
+    font-size: smaller;
   }
 </style>

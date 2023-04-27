@@ -1,17 +1,20 @@
 <template>
   <div class="register-container">
-    <b-card class="register-form">
+    <b-card no-body class="register-form mb-2">
       <b-card-header>
         <h4><b>Register your account:</b></h4>
-        <p>Welcome to <b>EvenBetterHealth</b>. Please register your account, if you are a new user.</p>
+        <p>Welcome to <b>EvenBetterHealth</b>. Register a new account by filling in your details below.</p>
       </b-card-header>
       <b-card-body>
+        <b-alert v-model="conflictAlert" variant="danger" dismissible>
+          Email already exists.
+        </b-alert>
         <b-form @submit.prevent="register" >
           <b-form-group id="fname-group"
                         label="First name:*"
                         label-for="fname-input">
-            <b-form-input id="name-input"
-                          v-model="fname"
+            <b-form-input id="first-name-input"
+                          v-model="form.firstName"
                           type="text"
                           required></b-form-input>
           </b-form-group>
@@ -19,8 +22,8 @@
           <b-form-group id="lname-group"
                         label="Last name:*"
                         label-for="lname-input">
-            <b-form-input id="name-input"
-                          v-model="lname"
+            <b-form-input id="last-name-input"
+                          v-model="form.lastName"
                           type="text"
                           required></b-form-input>
           </b-form-group>
@@ -29,13 +32,13 @@
                         label="Home address:*"
                         label-for="address-input">
             <b-form-textarea id="address-input"
-                          v-model="address"
+                          v-model="form.address"
                           type="text"
                           required></b-form-textarea>
           </b-form-group>
 
           <b-form-group id="profession-group" label="Current profession:*">
-            <b-form-radio-group v-model='profession' 
+            <b-form-radio-group v-model='form.role'
                                 :options='options' 
                                 value-field='item' 
                                 text-field='name' 
@@ -46,7 +49,7 @@
                         label="Email address:*"
                         label-for="email-input">
             <b-form-input id="email-input"
-                          v-model="email"
+                          v-model="form.email"
                           type="email"
                           required></b-form-input>
           </b-form-group>
@@ -55,16 +58,16 @@
                         label-for="password-input">
             <b-form-input id="password-input"
                           type="password"
-                          v-model="password"
+                          v-model="form.password"
                           required></b-form-input>
           </b-form-group><br>
 
-          <div class="register-form__buttons">
-            <b-button type='submit' variant="success" class='register-form__register'>Create an account</b-button>
-            <b-button to='/login' variant="primary" class='register-form__login'>Back to Login page</b-button>
-          </div>
+          <b-button type='submit' variant="success" class='register-form__register'>Register</b-button>
         </b-form>
       </b-card-body>
+      <template #footer>
+        Already a member? <b-link to='/login'>Login.</b-link>
+      </template>
     </b-card>
   </div>
 </template>
@@ -73,23 +76,32 @@
 export default {
   data() {
     return {
-      fname: '',
-      lname: '',
-      address: '',
-      profession:'', 
+      conflictAlert: false,
+      form: {
+        email: '',
+        password: '',
+        role: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+      },
       options: [
         {item: 'PATIENT', name: 'Patient'},
         {item: 'DOCTOR', name: 'Doctor'},
         {item: 'ADMINISTRATOR', name: 'Administrator'}
       ],
-      email: '',
-      password: ''
     }
   },
   name: 'RegisterPage',
   methods: {
-    register() {
-      
+    async register() {
+      await this.$store.dispatch('register', this.form)
+          .catch(exception => {
+            console.log(exception.status, exception.statusText);
+            if (exception.status === 409) {
+              this.conflictAlert = true;
+            }
+          });
     }
   }
 }
@@ -99,20 +111,10 @@ export default {
   .card-header h4 {
     margin-bottom: 0;
   }
-  .register-form__buttons{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
     .register-form__register {
     width: 100%;
     border-radius: 13px;
     margin-bottom: 2px
-  }
-    .register-form__login {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 2px
   }
   .register-container {
     display: flex;
@@ -125,6 +127,6 @@ export default {
   }
   .register-form {
     width: 40%;
-    margin: 0 auto;
+    font-size: smaller;
   }
 </style>

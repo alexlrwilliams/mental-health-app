@@ -4,7 +4,8 @@ import com.com3014.userauthservice.UnitTestHelper;
 import com.com3014.userauthservice.exceptions.UnauthorisedAccessException;
 import com.com3014.userauthservice.exceptions.UserAlreadyExistAuthenticationException;
 import com.com3014.userauthservice.model.User;
-import com.com3014.userauthservice.model.json.JsonUser;
+import com.com3014.userauthservice.model.json.user.JsonCreateUser;
+import com.com3014.userauthservice.model.json.user.JsonUpdateUser;
 import com.com3014.userauthservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,8 @@ class UserServiceTest {
     private final User user1 = UnitTestHelper.testUser1;
     private final User user2 = UnitTestHelper.testUser2;
 
-    private final JsonUser jsonUser = UnitTestHelper.jsonUser;
+    private final JsonCreateUser jsonCreateUser = UnitTestHelper.JSON_CREATE_USER;
+    private final JsonUpdateUser jsonUpdateUser = UnitTestHelper.JSON_UPDATE_USER;
 
     private final List<User> allUsers = List.of(user1, user2);
 
@@ -106,8 +108,8 @@ class UserServiceTest {
     void createUser__user_does_not_exist() {
         when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.save(any(User.class))).thenReturn(user1);
-        assertThat(userService.createUser(jsonUser)).isEqualTo(user1);
-        verify(passwordEncoder, times(1)).encode(jsonUser.getPassword());
+        assertThat(userService.createUser(jsonCreateUser)).isEqualTo(user1);
+        verify(passwordEncoder, times(1)).encode(jsonCreateUser.getPassword());
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
                 .usingRecursiveComparison()
@@ -119,7 +121,7 @@ class UserServiceTest {
     void createUser__user_exists() {
         when(userRepository.findUserByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.createUser(jsonUser))
+        assertThatThrownBy(() -> userService.createUser(jsonCreateUser))
                 .isInstanceOf(UserAlreadyExistAuthenticationException.class);
     }
 
@@ -137,12 +139,11 @@ class UserServiceTest {
 
     @Test
     void updateUser__conflicting_user_does_not_exist() {
-        when(passwordEncoder.encode(anyString())).thenAnswer(i -> i.getArguments()[0]);
         when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         when(userRepository.findUserByUsername(EMAIL))
                 .thenReturn(Optional.of(user1));
 
-        userService.updateUser(user1.getId(), jsonUser, user1.getUsername());
+        userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername());
 
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
@@ -157,7 +158,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(user2));
 
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser, user1.getUsername()))
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername()))
                 .isInstanceOf(UserAlreadyExistAuthenticationException.class);
     }
 
@@ -168,7 +169,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(user1));
 
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUser, "email"))
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, "email"))
                 .isInstanceOf(UnauthorisedAccessException.class);
     }
 
