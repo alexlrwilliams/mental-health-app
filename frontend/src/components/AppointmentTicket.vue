@@ -31,7 +31,7 @@
               <br>
               {{ appointment.summary }}
             </b-card-text>
-            <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
+            <b-button :to="`/chat/${appointment.id}`" :disabled="isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
             <b-button @click="show" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
             <b-modal @ok="cancel" ok-variant="danger" :id="`modal-${appointment.id}`" centered title="Confirm" ok-title="Confirm" cancel-title="Cancel">
               Please confirm you want to delete your appointment with <b>{{ this.doctorName }}</b>. Once you cancel an appointment, you cannot undo it. However, you can still access it in the "cancelled" tab.

@@ -1,6 +1,12 @@
 import {get, post, put} from "@/js/http-requests";
 import {handleRequest} from "@/js/request_helpers";
 
+
+export async function getAppointmentById(appointmentId) {
+    return await get(`appointments/${appointmentId}`)
+        .then(handleRequest);
+}
+
 export async function getUserAppointments(userId) {
     return await get(`appointments/patient/${userId}`)
         .then(handleRequest);
