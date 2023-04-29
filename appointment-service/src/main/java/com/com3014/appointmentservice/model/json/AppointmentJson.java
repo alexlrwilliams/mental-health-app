@@ -2,17 +2,25 @@ package com.com3014.appointmentservice.model.json;
 
 
 import java.util.UUID;
-
 import java.time.Instant;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 
 public class AppointmentJson 
 {
+     @NotNull
      private UUID docId;
+     @FutureOrPresent
      private Instant startTime;
+     @FutureOrPresent
      private Instant endTime;
+     @NotNull
      private UUID patientId;
+     @NotNull
      private String summary;
+     @NotNull
      private String type;
+     @NotNull
      private Boolean cancelled;
 
      public AppointmentJson(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled) {  
