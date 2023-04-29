@@ -5,7 +5,7 @@
       <h3 class="mx-auto"> {{ chatName }} </h3>
       <template v-if="isDoctor">
         <b-button variant="primary" v-b-toggle.sidebar-1>Patient's history <b-icon-card-text/></b-button>
-        <chat-sidebar/>
+        <chat-sidebar v-if="otherUser" :patient="otherUser"/>
       </template>
     </div>
 
@@ -16,8 +16,8 @@
 
     <!-- Chat input section -->
     <form class="chat-input" @submit.prevent="sendMessage">
-      <input type="text" v-model="message" placeholder="Type your message...">
-      <b-button variant="success" type="Submit">Send<b-icon-chevron-double-right/></b-button>
+      <input :disabled="!isCurrent" type="text" v-model="message" placeholder="Type your message...">
+      <b-button :disabled="!isCurrent" variant="success" type="Submit">Send<b-icon-chevron-double-right/></b-button>
     </form>
   </div>
 </template>
@@ -48,30 +48,32 @@ export default {
   async created() {
     Pusher.logToConsole = true;
 
-    this.messages = await getChatHistory(this.id);
-
-    await joinChat(this.id)
-        .then(() => {
-          const pusher = new Pusher('07602526ba53e0d9ccb6', {
-            cluster: 'eu'
-          });
-
-          const channel = pusher.subscribe(this.id);
-          channel.bind('JOIN', (data) => {
-            this.messages.push({...data, type: "JOIN"});
-          });
-
-          channel.bind('MESSAGE', (data) => {
-            this.messages.push({...data, type: "MESSAGE"});
-            this.$nextTick(() => {
-              const lastMessage = this.$refs.message[this.$refs.message.length - 1].$refs.content;
-              lastMessage.scrollIntoView({behavior: 'smooth', block: 'end'});
-            });
-          });
-        })
-
     await getAppointmentById(this.id)
         .then(response => this.appointment = response);
+
+    if (this.isCurrent) {
+      await joinChat(this.id)
+          .then(() => {
+            const pusher = new Pusher('07602526ba53e0d9ccb6', {
+              cluster: 'eu'
+            });
+
+            const channel = pusher.subscribe(this.id);
+            channel.bind('JOIN', (data) => {
+              this.messages.push({...data, type: "JOIN"});
+            });
+
+            channel.bind('MESSAGE', (data) => {
+              this.messages.push({...data, type: "MESSAGE"});
+              this.$nextTick(() => {
+                const lastMessage = this.$refs.message[this.$refs.message.length - 1].$refs.content;
+                lastMessage.scrollIntoView({behavior: 'smooth', block: 'end'});
+              });
+            });
+          })
+
+      this.messages = await getChatHistory(this.id);
+    }
 
     if (this.isDoctor) {
       this.otherUser = await getUserById(this.appointment.patientId);
@@ -96,6 +98,9 @@ export default {
     },
     chatName() {
       return this.otherUser ? `${this.otherUser.firstName} ${this.otherUser.lastName}` : "";
+    },
+    isCurrent() {
+      return new Date(this.appointment.endTime) > new Date();
     }
   }
 }

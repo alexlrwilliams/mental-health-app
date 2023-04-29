@@ -1,34 +1,41 @@
 <template>
   <b-sidebar class='slidebar' id="sidebar-1" title="Patient's history:" shadow>
     <div class="px-3 py-2">
-      <p><b>Name:</b> Ahmed </p>
+      <p><b>Name:</b> {{ `${patient.firstName} ${patient.lastName}` }} </p>
       <div v-for="(history, index) in historyAppointmentDetails" :key="index" style="border: 1px solid green; padding: 10px; margin-bottom: 10px">
-        <p><b>Appointment:</b>{{ history.appointmentDate }}</p>
-        <p><b>Description:</b>{{ history.description }}</p>
+        <p v-if="history.startTime"><b>Appointment:</b>{{ history.startTime | formatDate }}</p>
+        <p><b>Description:</b>{{ history.summary }}</p>
       </div>
     </div>
   </b-sidebar>
 </template>
 
 <script>
+import {getUserAppointments} from "@/js/appointments";
+import moment from "moment/moment";
+
 export default {
   name: "ChatSidebar",
   props: {
-    patient: {type: Object, required: false}
+    patient: {type: Object, required: true}
   },
   data() {
     return {
-      historyAppointmentDetails: [
-        {
-          'appointmentDate': '20 April 2023',
-          'description': ' I have been feeling depressed lately ...'
-        },
-        {
-          'appointmentDate': '29 April 2023',
-          'description': 'I am feeling much better now. But I have a new problem ...'
-        }
-      ]
+      historyAppointmentDetails: []
     }
+  },
+  async created() {
+    var appointments = await getUserAppointments(this.patient.id);
+    this.historyAppointmentDetails = appointments
+        .filter((appointment) => new Date() > new Date(appointment.endTime))
+        .filter(appointment => !appointment.cancelled)
+        .sort((a, b) => new Date(b.endTime) - new Date(a.endTime));
+  },
+  filters: {
+    formatDate: function (value) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Intl.DateTimeFormat('en-US', options).format(moment(value));
+    },
   }
 }
 </script>
