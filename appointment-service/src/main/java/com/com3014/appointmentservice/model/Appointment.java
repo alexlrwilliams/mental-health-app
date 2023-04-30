@@ -2,7 +2,8 @@ package com.com3014.appointmentservice.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -12,12 +13,19 @@ import java.util.UUID;
 public class Appointment {
     @Id
     private UUID id;
+    @NotNull
     private UUID docId;
+    @NotNull
     private Instant startTime;
+    @NotNull
     private Instant endTime;
+    @NotNull
     private UUID patientId;
+    @NotBlank
     private String summary;
+    @NotBlank
     private String type;
+    @NotNull
     private Boolean cancelled;
 
     public Appointment(UUID docId,Instant startTime,Instant endTime,UUID patientId,String summary,String type,Boolean cancelled) {
