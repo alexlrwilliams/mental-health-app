@@ -19,7 +19,7 @@
             Your appointment with <b>{{ this.patientName }}</b> has terminated.
             {{ appointment.type === 'CHAT' ? ' However, you are still able to access your previous chat with the patient, by clicking the button below.' : '' }}
           </b-card-text>
-          <b-button v-if="appointment.type === 'CHAT'" class="chat-access" variant="primary">Access chat</b-button>
+          <b-button :to="`/chat/${appointment.id}`" v-if="appointment.type === 'CHAT'" class="chat-access" variant="primary">Access chat</b-button>
         </template>
 
         <template v-else>
@@ -31,7 +31,7 @@
               <br>
               {{ appointment.summary }}
             </b-card-text>
-            <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
+            <b-button :to="`/chat/${appointment.id}`" :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
             <b-button @click="show" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
             <b-button class="summary-btn" variant="primary" @click="showModal=true">View summary</b-button>
             <b-modal @ok="cancel" ok-variant="danger" :id="`modal-${appointment.id}`" centered title="Confirm" ok-title="Confirm" cancel-title="Cancel">

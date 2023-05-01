@@ -9,6 +9,7 @@ import {refreshTokens} from "@/js/user-auth";
 import ProfilePage from "@/pages/ProfilePage.vue";
 import ChatPage from "@/pages/ChatPage.vue";
 import VideoCallPage from "@/pages/VideoCallPage.vue";
+import ChatPage from "@/pages/ChatPage.vue";
 
 Vue.use(Router);
 
@@ -18,7 +19,7 @@ const routes = [
     { path: '/register', component: RegisterPage },
     { path: '/book-appointment', component: BookAppointmentPage },
     { path: '/profile', component: ProfilePage },
-    { path: '/chat', component: ChatPage },
+    { path: '/chat/:id', component: ChatPage, props: true}
     { path: '/video/:roomId', component: VideoCallPage, props:true }
 ]
 
