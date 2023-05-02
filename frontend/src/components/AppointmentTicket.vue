@@ -33,10 +33,18 @@
             </b-card-text>
             <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
             <b-button @click="show" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
+            <b-button class="summary-btn" variant="primary" @click="showModal=true">View summary</b-button>
             <b-modal @ok="cancel" ok-variant="danger" :id="`modal-${appointment.id}`" centered title="Confirm" ok-title="Confirm" cancel-title="Cancel">
               Please confirm you want to delete your appointment with <b>{{ this.doctorName }}</b>. Once you cancel an appointment, you cannot undo it. However, you can still access it in the "cancelled" tab.
             </b-modal>
         </template>
+
+          <b-modal v-model="showModal" title="Appointment summary:" hide-footer>
+            <h5>Patient name:</h5><p>{{ appointment.patientId }}</p>
+            <h5>Appointment type:</h5><p>{{ appointment.type }}</p>
+            <h5>Description:</h5><p>{{ appointment.summary }}</p>
+          </b-modal>
+
       </b-card>
   </div>
 </template>
@@ -59,7 +67,7 @@ export default {
       fetching: false,
       doctorName: undefined,
       patientName: undefined,
-      test: ""
+      showModal: false
     }
   },
   methods: {
@@ -117,6 +125,9 @@ export default {
     margin-right: 3px;
 }
 .cancel-btn {
+    margin-left: 3px;
+}
+.summary-btn {
     margin-left: 3px;
 }
 </style>
