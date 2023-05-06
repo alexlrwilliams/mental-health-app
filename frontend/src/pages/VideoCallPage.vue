@@ -1,21 +1,20 @@
 <template>
-    <div class="container">
-            <div class="video-list">
-        <div v-for="item in videoList"
-             :key="item.id"
-             class="video-item">
-            <video autoplay playsinline ref="videos"  :muted="item.muted" :id="item.id">
-              <p>User has left </p>
-            </video>
-        </div>
+  <div class="container">
+    <!-- Leave Button -->
+    <div class="leave-btn-container">
+      <b-button class="leave-video-btn" variant="danger" @click="leave" to="/">
+        Leave meeting
+      </b-button>
     </div>
-
-        <div class="buttons">
-            <b-button class="leave-video-btn" variant='danger' @click="leave" to="/" >Leave</b-button>
-        </div>
-
-
+    <!-- Video call screen -->
+    <div class="video-list">
+      <div v-for="item in videoList" :key="item.id" class="video-item">
+        <video autoplay playsinline ref="videos" :muted="item.muted" :id="item.id" style="width: 100%;">
+          <p>User has left </p>
+        </video>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -164,38 +163,45 @@
 
 <style scoped>
 .container {
-  display: flex;
-  align-items: center;
-  flex-flow: column;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
 }
 .buttons {
-  position: absolute;
-  bottom:   0;
-  margin-bottom: 50px;
+    position: absolute;
+    bottom:   0;
+    margin-bottom: 50px;
 }
 .join-video-btn{
-
-  margin-right: 5px;
-  width: 150px;
+    margin-right: 5px;
+    width: 150px;
 }
 .leave-video-btn {
-
-  margin-left: 5px;
-  width: 150px;
+    margin-left: 5px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 350px;
 }
-    .video-list {
-        background: whitesmoke;
-        height: auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-        .video-list div {
-            padding: 0px;
-        }
-    .video-item {
-        background: #c5c4c4;
-        display: inline-block;
-    }
+.video-list {
+    background: rgb(79, 78, 78);
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+
+}
+.video-list div {
+    padding: 0px;
+}
+.video-item {
+    background: #c5c4c4;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 15px;
+    width: 80%;
+}
 </style>
