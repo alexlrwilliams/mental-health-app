@@ -13,6 +13,8 @@
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
     "moment": "^2.29.4",
+    "simple-signal-client": "^3.0.0",
+    "socket.io-client": "^4.6.1",
     "vue": "^2.7.14",
     "vue-router": "^3.6.5",
     "vuex": "^3.4.0"
