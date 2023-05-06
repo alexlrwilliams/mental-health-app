@@ -1,18 +1,14 @@
 <template>
   <div class="container">
     <!-- Leave Button -->
-    <div class="leave-btn-container">
-      <b-button class="leave-video-btn" variant="danger" @click="leave" to="/">
-        Leave meeting
-      </b-button>
-    </div>
+    <b-button class="leave-video-btn" variant="danger" @click="leave" to="/">
+      Leave meeting
+    </b-button>
     <!-- Video call screen -->
     <div class="video-list">
-      <div v-for="item in videoList" :key="item.id" class="video-item">
-        <video autoplay playsinline ref="videos" :muted="item.muted" :id="item.id" style="width: 100%;">
-          <p>User has left </p>
-        </video>
-      </div>
+      <video v-for="item in videoList" :key="item.id" autoplay playsinline ref="videos" :muted="item.muted" :id="item.id" class="video">
+        <p>User has left </p>
+      </video>
     </div>
   </div>
 </template>
@@ -187,21 +183,25 @@
     height: auto;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     border: 1px solid black;
+    padding: 5px;
     border-radius: 10px;
     width: 100%;
 
 }
-.video-list div {
-    padding: 0px;
-}
-.video-item {
+
+.video {
     background: #c5c4c4;
-    display: inline-block;
     border: 1px solid black;
     border-radius: 15px;
-    width: 80%;
+    width: 30vw;
+}
+
+@media (max-width:960px) {
+  .video {
+    width: 100%
+  }
 }
 </style>
