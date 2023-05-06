@@ -40,7 +40,9 @@
         </template>
 
           <b-modal v-model="showModal" title="Appointment summary:" hide-footer>
-            <h5>Patient name:</h5><p>{{ appointment.patientId }}</p>
+            <template v-if="!isPatient">
+              <h5>Patient name:</h5><p>{{ appointment.patientId }}</p>
+            </template>
             <h5>Appointment type:</h5><p>{{ appointment.type }}</p>
             <h5>Description:</h5><p>{{ appointment.summary }}</p>
           </b-modal>
