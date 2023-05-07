@@ -34,6 +34,9 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private S3Service s3Service;
+
     @InjectMocks
     private UserService userService;
 
@@ -143,7 +146,7 @@ class UserServiceTest {
         when(userRepository.findUserByUsername(EMAIL))
                 .thenReturn(Optional.of(user1));
 
-        userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername());
+        userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername(), null);
 
         verify(userRepository, times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
@@ -158,7 +161,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(user2));
 
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername()))
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, user1.getUsername(), null))
                 .isInstanceOf(UserAlreadyExistAuthenticationException.class);
     }
 
@@ -169,7 +172,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(user1));
 
         verify(userRepository, never()).save(any());
-        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, "email"))
+        assertThatThrownBy(() -> userService.updateUser(user1.getId(), jsonUpdateUser, "email", null))
                 .isInstanceOf(UnauthorisedAccessException.class);
     }
 

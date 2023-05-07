@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,13 +31,15 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final S3Service s3Service;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, S3Service s3Service) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.s3Service = s3Service;
     }
 
     public List<User> getAllUsers() {
@@ -71,7 +74,7 @@ public class UserService implements UserDetailsService {
         userRepository.delete(getUserByIdOrThrow(id));
     }
 
-    public User updateUser(UUID id, JsonUpdateUser jsonUser, String email) {
+    public User updateUser(UUID id, JsonUpdateUser jsonUser, String email, MultipartFile profilePicture) {
         List<Predicate<User>> filters = List.of(
                 (User user) -> !user.getId().equals(id)
         );
@@ -80,12 +83,15 @@ public class UserService implements UserDetailsService {
 
         validateUser(jsonUser, user, email, filters);
 
+        var profilePictureUrl = s3Service.saveProfilePicture(profilePicture);
+
         var updatedUser = user
                 .setFirstName(jsonUser.getFirstName())
                 .setLastName(jsonUser.getLastName())
                 .setUsername(jsonUser.getEmail())
                 .setAddress(jsonUser.getAddress())
-                .setHospital(jsonUser.getHospital());
+                .setHospital(jsonUser.getHospital())
+                .setProfilePictureUrl(profilePictureUrl);
         return userRepository.save(updatedUser);
     }
 

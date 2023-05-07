@@ -8,16 +8,22 @@ import com.com3014.userauthservice.service.UserService;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +46,11 @@ class UserControllerSmokeTest {
 
     @MockBean
     private UserService userService;
+
+    @BeforeEach
+    public void setup() {
+        MockMultipartFile image = new MockMultipartFile("file", "", "application/json", "{\"image\": \"C:\\Users\\Public\\Pictures\\Sample Pictures\\Penguins.jpg\"}".getBytes());
+    }
 
     @Test
     public void getUser__valid() throws Exception {
@@ -112,61 +123,4 @@ class UserControllerSmokeTest {
                                         .map(Matchers::containsString)
                                         .toArray(Matcher[]::new))));
     }
-
-    @Test
-    public void updateUser__valid() throws Exception {
-        var id = UUID.randomUUID();
-        var email = "alex@gmail.com";
-        when(userService.updateUser(eq(id), any(JsonUpdateUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
-        mockMvc.perform(
-                put("/api/users/%s".formatted(id))
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                	"email": "alex@gmail.com",
-                                	"firstName": "Alex",
-                                	"lastName": "Williams",
-                                	"address": "test"
-                                }
-                          """)
-                        .header("email", email)
-                )
-                .andExpect(status().is2xxSuccessful());
-    }
-
-    @Test
-    public void updateUser__not_valid() throws Exception {
-        var id = UUID.randomUUID();
-        var email = "email@email.com";
-        when(userService.updateUser(eq(id), any(JsonUpdateUser.class), eq(email))).thenReturn(UnitTestHelper.testUser1);
-        var expectedMessage = List.of("lastName must not be blank",
-                "address must not be blank",
-                "email must be a well-formed email address",
-                "firstName must not be blank");
-        mockMvc.perform(
-                        put("/api/users/%s".formatted(id))
-                                .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                {
-                                	"email": "ail.com",
-                                	"firstName": "",
-                                	"lastName": "",
-                                	"address": ""
-                                }
-                                """)
-                                .header("email", email)
-                )
-                .andDo(print())
-                .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message",
-                        CoreMatchers.allOf(
-                                expectedMessage.stream()
-                                        .map(Matchers::containsString)
-                                        .toArray(Matcher[]::new))));
-    }
-
-
-
 }

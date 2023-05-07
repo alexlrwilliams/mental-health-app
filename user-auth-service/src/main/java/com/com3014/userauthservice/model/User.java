@@ -37,6 +37,9 @@ public class User implements UserDetails {
     @JsonView(Views.Public.class)
     private String hospital;
 
+    @JsonView(Views.Public.class)
+    private String profilePictureUrl;
+
     public User() {
     }
 
@@ -144,6 +147,15 @@ public class User implements UserDetails {
 
     public User setHospital(String hospital) {
         this.hospital = hospital;
+        return this;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public User setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
         return this;
     }
 

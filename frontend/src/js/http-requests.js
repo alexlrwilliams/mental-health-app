@@ -3,11 +3,11 @@ import {authHeader, emailHeader} from "@/js/request_helpers";
 const API_URL = "http://localhost:8081/api";
 
 export async function get(path, email, token, options, headers) {
-    return request("GET", path, null, email, token, options, headers);
+    return request("GET", path, null, email, token, options, {'content-type': 'application/json', ...headers});
 }
 
 export async function post(path, body, email, token, options, headers) {
-    return request("POST", path, body, email, token, options, headers);
+    return request("POST", path, body, email, token, options, {'content-type': 'application/json', ...headers});
 }
 
 export async function put(path, body, email, token, options, headers) {
@@ -19,7 +19,6 @@ async function request(requestType, path, body, email, token, options, headers) 
         method: requestType,
         headers: new Headers({
             'Accept': 'application/json',
-            'content-type': 'application/json',
             'email': emailHeader(email),
             'Authorization': authHeader(token),
             ...headers

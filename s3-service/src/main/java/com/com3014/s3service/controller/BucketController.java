@@ -44,7 +44,7 @@ public class BucketController {
     }
 
     @PostMapping("/{bucketName}/upload")
-    public void upload(@RequestPart MultipartFile file, @PathVariable String bucketName) throws IOException {
+    public void upload(@RequestParam MultipartFile file, @PathVariable String bucketName) throws IOException {
         Map<String, String> metadata = new HashMap<>();
         metadata.put("Content-Type", file.getContentType());
         metadata.put("Content-Length", String.valueOf(file.getSize()));
