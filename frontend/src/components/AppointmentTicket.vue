@@ -19,7 +19,7 @@
             Your appointment with <b>{{ this.patientName }}</b> has terminated.
             {{ appointment.type === 'CHAT' ? ' However, you are still able to access your previous chat with the patient, by clicking the button below.' : '' }}
           </b-card-text>
-          <b-button v-if="appointment.type === 'CHAT'" class="chat-access" variant="primary">Access chat</b-button>
+          <b-button :to="`/chat/${appointment.id}`" v-if="appointment.type === 'CHAT'" class="chat-access" variant="primary">Access chat</b-button>
         </template>
 
         <template v-else>
@@ -31,7 +31,7 @@
               <br>
               {{ appointment.summary }}
             </b-card-text>
-            <b-button :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
+            <b-button :to="joinUrl" :disabled="!isAppointmentCurrent" class="join-btn" variant="success">Join</b-button>
             <b-button @click="show" v-if="isPatient" class="cancel-btn" variant="danger">Cancel</b-button>
             <b-button class="summary-btn" variant="primary" @click="showModal=true">View summary</b-button>
             <b-modal @ok="cancel" ok-variant="danger" :id="`modal-${appointment.id}`" centered title="Confirm" ok-title="Confirm" cancel-title="Cancel">
@@ -41,7 +41,7 @@
 
           <b-modal v-model="showModal" title="Appointment summary:" hide-footer>
             <template v-if="!isPatient">
-              <h5>Patient name:</h5><p>{{ appointment.patientId }}</p>
+              <h5>Patient name:</h5><p>{{ this.patientName }}</p>
             </template>
             <h5>Appointment type:</h5><p>{{ appointment.type }}</p>
             <h5>Description:</h5><p>{{ appointment.summary }}</p>
@@ -114,6 +114,9 @@ export default {
     },
     isPatient() {
       return this.$store.getters.user.role === "PATIENT";
+    },
+    joinUrl() {
+      return this.appointment.type === 'CHAT' ? `/chat/${this.appointment.id}` : `/video/${this.appointment.id}`
     }
   }
 }
