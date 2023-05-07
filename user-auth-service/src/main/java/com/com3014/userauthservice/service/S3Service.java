@@ -16,6 +16,9 @@ public class S3Service {
     @Value("${s3-service-uri}")
     private String S3_SERVICE_BASE_URL;
 
+    @Value("${profile-endpoint}")
+    private String PROFILE_PIC_ENDPOINT;
+
     private final RestTemplate restTemplate;
 
     @Autowired
@@ -37,6 +40,6 @@ public class S3Service {
         System.out.println(url);
         restTemplate.postForEntity(url, requestEntity, String.class);
 
-        return "%s/%s".formatted(S3_SERVICE_BASE_URL,profilePicture.getOriginalFilename());
+        return "%s/%s".formatted(PROFILE_PIC_ENDPOINT,profilePicture.getOriginalFilename());
     }
 }

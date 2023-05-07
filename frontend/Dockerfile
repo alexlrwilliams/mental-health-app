@@ -1,5 +1,7 @@
 FROM node:latest as build-stage
 WORKDIR /app
+ARG VUE_APP_API_URL
+ENV VUE_APP_API_URL="http://localhost:8081/api"
 COPY package*.json ./
 RUN npm install
 COPY ./ .

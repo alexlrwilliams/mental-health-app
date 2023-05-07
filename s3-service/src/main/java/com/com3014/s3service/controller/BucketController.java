@@ -48,8 +48,7 @@ public class BucketController {
         Map<String, String> metadata = new HashMap<>();
         metadata.put("Content-Type", file.getContentType());
         metadata.put("Content-Length", String.valueOf(file.getSize()));
-        String fileName = String.format("%s", file.getOriginalFilename());
-        fileService.upload(bucketName, fileName, Optional.of(metadata), file.getInputStream());
+        fileService.upload(bucketName, file.getOriginalFilename(), Optional.of(metadata), file.getInputStream());
     }
 
     @GetMapping(value = "/{bucketName}/{fileName}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
