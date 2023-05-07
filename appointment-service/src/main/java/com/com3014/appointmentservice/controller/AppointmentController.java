@@ -63,7 +63,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAppointment(@PathVariable UUID id, @Valid @RequestBody AppointmentJson json, BindingResult result) {
+    public ResponseEntity<?> updateAppointment(@PathVariable UUID id, @RequestBody AppointmentJson json, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors()
                 .stream()

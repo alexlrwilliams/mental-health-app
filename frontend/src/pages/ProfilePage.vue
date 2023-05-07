@@ -52,7 +52,7 @@ export default {
     ...mapGetters(['user']),
   },
   created() {
-    this.profilePicture = 'path/to/default-profile-picture.jpg'; //fetch s3 picture from url?
+    this.profilePicture = this.user.profilePicUrl || 'path/to/default-profile-picture.jpg'; //fetch s3 picture from url?
     this.firstName = this.user.firstName;
     this.lastName = this.user.lastName;
     this.emailAddress = this.user.email;
@@ -87,6 +87,7 @@ export default {
         role: this.role,
         address: this.homeAddress,
         hospital: this.hospital,
+        profilePicture: this.$refs.fileInput.files[0]
       })
       this.isDisabled = true;
     }

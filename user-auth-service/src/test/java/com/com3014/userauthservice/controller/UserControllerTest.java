@@ -119,14 +119,14 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
-        when(userService.updateUser(user1.getId(), jsonUpdateUser, "email")).thenReturn(user1);
-        assertThat(userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email")).isEqualTo(user1);
+        when(userService.updateUser(eq(user1.getId()), eq(jsonUpdateUser), eq("email"), any())).thenReturn(user1);
+        assertThat(userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email", null)).isEqualTo(user1);
     }
 
     @Test
     void updateUser__user_not_valid() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email"));
-        verify(userService, never()).updateUser(any(),any(), any());
+        assertThatThrownBy(() -> userController.updateUser(user1.getId(), jsonUpdateUser, bindingResult, "email", null));
+        verify(userService, never()).updateUser(any(),any(), any(), any());
     }
 }

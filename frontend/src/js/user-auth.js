@@ -38,7 +38,6 @@ export async function getUserById(user) {
 }
 
 export async function updateUser(id, user, email, token) {
-    let body = JSON.stringify(user);
-    return await put(`users/${id}`, body, email, token)
+    return await put(`users/${id}`, user, email, token)
         .then(handleRequest);
 }

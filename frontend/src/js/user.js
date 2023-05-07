@@ -1,6 +1,7 @@
 export class User {
     constructor(id = "", accessToken = "", refreshToken = "",
-                email = "", role = "", firstName = "", lastName = "", address = "", hospital="") {
+                email = "", role = "", firstName = "", lastName = "", address = "",
+                hospital="", profilePicUrl = "") {
         this._id = id;
         this._accessToken = accessToken;
         this._refreshToken = refreshToken;
@@ -10,6 +11,7 @@ export class User {
         this._lastName = lastName;
         this._address = address;
         this._hospital = hospital;
+        this._profilePicUrl = profilePicUrl;
     }
 
     static from(jsonUser) {
@@ -21,7 +23,17 @@ export class User {
         user.role = jsonUser.role;
         user.email = jsonUser.email || jsonUser.username;
         user.hospital = jsonUser.hospital;
+        user.profilePicUrl = jsonUser.profilePictureUrl;
         return user;
+    }
+
+
+    get profilePicUrl() {
+        return this._profilePicUrl;
+    }
+
+    set profilePicUrl(value) {
+        this._profilePicUrl = value;
     }
 
     get id() {

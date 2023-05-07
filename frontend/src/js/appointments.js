@@ -30,6 +30,6 @@ export async function getDoctorAppointments(userId) {
 
 export async function updateAppointment(appointmentId, appointment) {
     let body = JSON.stringify(appointment);
-    return await put(`appointments/${appointmentId}`, body)
+    return await put(`appointments/${appointmentId}`, body, null, null, null, {'content-type': 'application/json'})
         .then(handleRequest);
 }

@@ -11,7 +11,8 @@
             <b-nav-item to="contact-us"><b-icon-telephone-fill/> Contact us</b-nav-item>
             <b-nav-item-dropdown right no-caret>
               <template #button-content>
-                <b-icon-person-circle/>
+                <b-avatar size="sm" v-if="$store.getters.user.profilePicUrl" :src="$store.getters.user.profilePicUrl"/>
+                <b-icon-person-circle v-else/>
               </template>
               <b-dropdown-text style="width: 240px;">
                 {{ userName }}

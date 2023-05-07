@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  front-end:
+    container_name: frontend
+    image: alexwilliams2001/group13-docker-repo:frontend
+    ports:
+      - "8080:8080"
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - cache:/data
+  user-auth-service:
+    container_name: user-auth-service
+    image: alexwilliams2001/group13-docker-repo:user-auth-service
+  appointment-service:
+    container_name: appointment-service
+    image: alexwilliams2001/group13-docker-repo:appointment-service
+  api-gateway:
+    container_name: api-gateway
+    image: alexwilliams2001/group13-docker-repo:api-gateway
+    ports:
+      - "8081:8081"
+  chat-service:
+    container_name: chat-service
+    image: alexwilliams2001/group13-docker-repo:chat-service
+  s3-service:
+    container_name: s3-service
+    image: alexwilliams2001/group13-docker-repo:s3-service
+volumes:
+  cache:
+    driver: local

@@ -72,9 +72,15 @@ const actions = {
             .then(async user => await commit('updateUser', user))
     },
     async updateUser({ commit, getters }, user) {
-        await updateUser(getters.user.id, user, getters.user.email)
+        const { profilePicture, ...userData } = user;
+        const formData = new FormData();
+
+        const jsonBlob = new Blob([JSON.stringify(userData)], { type: 'application/json' });
+        formData.append('user', jsonBlob);
+        formData.append('profilePicture', profilePicture);
+
+        await updateUser(getters.user.id, formData, getters.user.email)
             .then(async user => await commit('updateUser', user))
-        commit('updateUser', user);
     }
 };
 
