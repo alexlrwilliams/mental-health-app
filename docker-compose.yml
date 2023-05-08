@@ -28,6 +28,8 @@ services:
   s3-service:
     container_name: s3-service
     image: alexwilliams2001/group13-docker-repo:s3-service
+    ports:
+      - "8085:8085"
 volumes:
   cache:
     driver: local
